@@ -1,0 +1,1741 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diracha Academy LMS — Client Requirements &amp; Decision Form</title>
+<meta name="description" content="Prerequisite information and decision collection form for the Diracha Academy LMS project.">
+<style>
+:root{
+  --bg:#eef2f7;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --line:#e2e8f0;
+  --soft:#f8fafc;
+  --primary:#0f766e;
+  --primary-dark:#0b5d57;
+  --primary-soft:#e6f4f2;
+  --accent:#0ea5e9;
+  --ok:#16a34a;
+  --ok-soft:#eafaf0;
+  --warn:#d97706;
+  --warn-soft:#fff6e6;
+  --err:#dc2626;
+  --err-soft:#fdecec;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(15,23,42,.06), 0 8px 24px -12px rgba(15,23,42,.18);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,"Noto Sans Bengali",sans-serif;
+  font-size:15px;
+  line-height:1.55;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:960px;margin:0 auto;padding:0 14px 120px}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-in{max-width:960px;margin:0 auto;padding:10px 14px}
+.topbar-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.2px}
+.brand .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--primary),var(--accent));display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800}
+.brand small{display:block;font-weight:500;color:var(--muted);font-size:11.5px;letter-spacing:0}
+.spacer{flex:1}
+.tb-btn{
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  padding:7px 12px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;
+  transition:.15s;
+}
+.tb-btn:hover{background:var(--soft);border-color:#cbd5e1}
+.tb-btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.tb-btn.primary:hover{background:var(--primary-dark)}
+.progress-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+.progress{flex:1;height:7px;border-radius:99px;background:#e5eaf1;overflow:hidden}
+.progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .25s ease}
+.progress-txt{font-size:11.5px;font-weight:700;color:var(--muted);white-space:nowrap}
+
+/* ---------- intro ---------- */
+.hero{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px 18px 16px;margin:18px 0 16px;box-shadow:var(--shadow)
+}
+.hero h1{margin:0 0 6px;font-size:21px;letter-spacing:-.4px}
+.hero p{margin:0 0 10px;color:var(--muted);font-size:13.5px}
+.notice{
+  border:1px solid #fde68a;background:var(--warn-soft);color:#7c4a03;
+  border-radius:10px;padding:10px 12px;font-size:13px;margin-top:12px
+}
+.notice b{color:#7c4a03}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.pill{display:inline-block;padding:1px 7px;border-radius:99px;font-size:10.5px;font-weight:800;letter-spacing:.3px}
+.pill.req{background:var(--err-soft);color:var(--err)}
+.pill.opt{background:#eef2f7;color:var(--muted)}
+.pill.lock{background:var(--primary-soft);color:var(--primary)}
+
+/* ---------- cards ---------- */
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden
+}
+.card-head{
+  width:100%;display:flex;align-items:center;gap:10px;
+  background:#fff;border:0;border-bottom:1px solid transparent;
+  padding:13px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit
+}
+.card-head:hover{background:var(--soft)}
+.card:not(.collapsed) .card-head{border-bottom-color:var(--line)}
+.num{
+  flex:0 0 auto;width:26px;height:26px;border-radius:8px;background:var(--primary-soft);
+  color:var(--primary);display:grid;place-items:center;font-size:12px;font-weight:800
+}
+.card-head h2{flex:1;margin:0;font-size:14.5px;letter-spacing:-.2px}
+.badge{
+  font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;
+  background:#eef2f7;color:var(--muted);white-space:nowrap
+}
+.badge.done{background:var(--ok-soft);color:var(--ok)}
+.chev{color:var(--muted);font-size:12px;transition:transform .2s}
+.card.collapsed .chev{transform:rotate(-90deg)}
+.card.collapsed .card-body{display:none}
+.card-body{padding:14px 14px 6px}
+.sub{margin:18px 0 8px;font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--primary)}
+.sub:first-child{margin-top:4px}
+.note{font-size:12.5px;color:var(--muted);margin:0 0 12px;padding:9px 11px;background:var(--soft);border-left:3px solid var(--primary);border-radius:0 8px 8px 0}
+
+/* ---------- fields ---------- */
+.field{margin:0 0 14px}
+.lbl{display:block;font-size:13px;font-weight:600;margin-bottom:5px;color:#1e293b}
+.req{color:var(--err);font-weight:800;margin-left:2px}
+.hint{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.45}
+input[type=text],input[type=email],input[type=tel],input[type=url],input[type=number],input[type=date],input[type=password],select,textarea{
+  width:100%;padding:9px 11px;border:1px solid #cbd5e1;border-radius:10px;
+  font:inherit;font-size:13.5px;background:#fff;color:var(--ink);transition:.15s
+}
+input::placeholder,textarea::placeholder{color:#a8b3c4}
+input:focus,select:focus,textarea:focus{
+  outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(15,118,110,.13)
+}
+textarea{min-height:78px;resize:vertical;line-height:1.5}
+select{appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:16px;padding-right:32px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;
+  background:var(--soft);border:1px solid var(--line);border-radius:99px;
+  padding:6px 12px;cursor:pointer;transition:.15s;user-select:none
+}
+.opts label:hover{border-color:#cbd5e1;background:#fff}
+.opts input{accent-color:var(--primary);margin:0}
+.opts label:has(input:checked){background:var(--primary-soft);border-color:var(--primary);color:var(--primary-dark)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 14px}
+@media(max-width:640px){.grid2,.grid3{grid-template-columns:1fr}}
+
+/* class rows */
+.classrow{border:1px solid var(--line);border-radius:11px;padding:11px 12px 0;margin-bottom:10px;background:var(--soft)}
+.classrow h4{margin:0 0 9px;font-size:12.5px;font-weight:800;color:var(--primary);letter-spacing:.3px}
+.classrow .field{margin-bottom:11px}
+
+/* errors */
+.field.error .lbl{color:var(--err)}
+.field.error input,.field.error select,.field.error textarea{border-color:var(--err);background:#fff7f7}
+.field.error .opts label{border-color:#f3b4b4}
+
+/* ---------- bottom action bar ---------- */
+.actionbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:60;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);padding:10px 14px
+}
+.actionbar-in{max-width:960px;margin:0 auto;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.actionbar .grow{flex:1;font-size:12px;color:var(--muted);min-width:150px}
+.btn{
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  padding:10px 16px;border-radius:11px;font:inherit;font-size:13.5px;font-weight:700;
+  cursor:pointer;transition:.15s;white-space:nowrap
+}
+.btn:hover{background:var(--soft)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn.primary:hover{background:var(--primary-dark)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+
+/* ---------- modal ---------- */
+.modal{
+  position:fixed;inset:0;z-index:100;display:none;
+  background:rgba(15,23,42,.55);padding:18px;overflow:auto
+}
+.modal.open{display:block}
+.modal-box{
+  max-width:680px;margin:40px auto;background:#fff;border-radius:16px;
+  padding:20px;box-shadow:0 30px 60px -20px rgba(0,0,0,.4)
+}
+.modal-box h3{margin:0 0 8px;font-size:17px}
+.modal-box p{margin:0 0 12px;font-size:13.5px;color:var(--muted)}
+.modal-box textarea{min-height:200px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+.modal-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.status-ok{background:var(--ok-soft);border:1px solid #b7e4c7;color:#14532d;border-radius:11px;padding:12px;font-size:13.5px}
+.status-err{background:var(--err-soft);border:1px solid #f5b5b5;color:#7f1d1d;border-radius:11px;padding:12px;font-size:13.5px}
+.saveflag{font-size:11.5px;color:var(--ok);font-weight:700;opacity:0;transition:opacity .3s}
+.saveflag.on{opacity:1}
+
+@media print{
+  .topbar,.actionbar,.modal,.tb-btn{display:none!important}
+  .card{break-inside:avoid;box-shadow:none}
+  .card.collapsed .card-body{display:block!important}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= TOP BAR ================= -->
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="dot">DA</span>
+        <span>Diracha Academy LMS<small>Client Requirements &amp; Decision Form</small></span>
+      </div>
+      <span class="spacer"></span>
+      <span class="saveflag" id="saveflag">Draft saved</span>
+      <button type="button" class="tb-btn" id="btnExpand">Expand all</button>
+      <button type="button" class="tb-btn" id="btnCollapse">Collapse all</button>
+      <button type="button" class="tb-btn" id="btnPrint">Print / PDF</button>
+    </div>
+    <div class="progress-row">
+      <div class="progress"><i id="progressBar"></i></div>
+      <span class="progress-txt" id="progressTxt">0 / 0 required</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ================= HERO ================= -->
+  <div class="hero">
+    <h1>Diracha Academy LMS — Prerequisite Information &amp; Decision Form</h1>
+    <p>
+      This form collects every business, academic, operational, legal, design and infrastructure
+      decision required before the Diracha Academy LMS (Master Architecture Specification v2)
+      can be built and launched. Fill in what you know. For anything undecided, choose
+      <b>“Not decided”</b> or write your question in the notes fields.
+    </p>
+    <div class="legend">
+      <span><span class="pill req">REQUIRED</span> must be answered</span>
+      <span><span class="pill opt">OPTIONAL</span> answer if known</span>
+      <span><span class="pill lock">LOCKED</span> already fixed by architecture v2</span>
+    </div>
+    <div class="notice">
+      <b>Before you submit:</b> your answers are saved automatically in this browser as a draft.
+      When you press <b>Submit</b>, all answers are emailed to the project owner. If the automatic
+      send fails, the form will show a <b>copy / download / email</b> fallback so nothing is lost.
+      Keep this tab open until you see the confirmation message.
+    </div>
+  </div>
+
+  <form id="reqForm" novalidate>
+
+  <!-- ================= 1. SUBMISSION DETAILS ================= -->
+  <section class="card" data-section="1. Submission Details">
+    <button type="button" class="card-head"><span class="num">1</span><h2>Submission Details</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Tell us who is filling this form and whether this is a final or draft submission.</p>
+      <div class="grid2">
+        <div class="field" data-req="1"><label class="lbl" for="sub_name">Your full name <span class="req">*</span></label><input id="sub_name" name="sub_name" type="text" placeholder="e.g. Md. Abdul Karim"></div>
+        <div class="field" data-req="1"><label class="lbl" for="sub_role">Your role in this project <span class="req">*</span></label>
+          <select id="sub_role" name="sub_role">
+            <option value="">-- Select role --</option>
+            <option>Client / Product Owner</option>
+            <option>Academy Director / Principal</option>
+            <option>Academic Admin</option>
+            <option>Finance / Accounts</option>
+            <option>Customer Care / Operations</option>
+            <option>Technical Lead / Architecture Planner</option>
+            <option>Developer</option>
+            <option>DevOps / Infrastructure</option>
+            <option>UI/UX Designer</option>
+            <option>Legal / Compliance</option>
+            <option>QA / Security</option>
+            <option>Content / Media Team</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field"><label class="lbl" for="sub_org">Organization / department</label><input id="sub_org" name="sub_org" type="text" placeholder="e.g. Diracha Academy"></div>
+        <div class="field" data-req="1"><label class="lbl" for="sub_email">Your email <span class="req">*</span></label><input id="sub_email" name="sub_email" type="email" placeholder="name@example.com"><div class="hint">We may reply to this address with follow-up questions.</div></div>
+        <div class="field" data-req="1"><label class="lbl" for="sub_phone">Your phone / WhatsApp <span class="req">*</span></label><input id="sub_phone" name="sub_phone" type="tel" placeholder="+880 1XXX XXXXXX"></div>
+        <div class="field"><label class="lbl" for="sub_date">Date of submission</label><input id="sub_date" name="sub_date" type="date"></div>
+        <div class="field"><label class="lbl" for="sub_version">Submission version / label</label><input id="sub_version" name="sub_version" type="text" placeholder="e.g. v1.0 — initial client answers"></div>
+      </div>
+      <div class="field" data-req="1"><div class="lbl">Is this submission final or a draft? <span class="req">*</span></div>
+        <div class="opts">
+          <label><input type="radio" name="sub_final" value="Final — approved by client"> Final — approved by client</label>
+          <label><input type="radio" name="sub_final" value="Draft — more answers coming"> Draft — more answers coming</label>
+          <label><input type="radio" name="sub_final" value="Partially complete"> Partially complete</label>
+        </div>
+      </div>
+      <div class="field"><div class="lbl">Which parts of this form are you answering now?</div>
+        <div class="opts">
+          <label><input type="checkbox" name="sub_scope[]" value="Business &amp; branding"> Business &amp; branding</label>
+          <label><input type="checkbox" name="sub_scope[]" value="Academic (classes/subjects/lessons)"> Academic</label>
+          <label><input type="checkbox" name="sub_scope[]" value="Registration &amp; security"> Registration &amp; security</label>
+          <label><input type="checkbox" name="sub_scope[]" value="Purchase &amp; enrollment"> Purchase &amp; enrollment</label>
+          <label><input type="checkbox" name="sub_scope[]" value="Teacher / Admin"> Teacher / Admin</label>
+          <label><input type="checkbox" name="sub_scope[]" value="Media &amp; content"> Media &amp; content</label>
+          <label><input type="checkbox" name="sub_scope[]" value="Design &amp; UI/UX"> Design &amp; UI/UX</label>
+          <label><input type="checkbox" name="sub_scope[]" value="Legal &amp; policies"> Legal &amp; policies</label>
+          <label><input type="checkbox" name="sub_scope[]" value="Infrastructure &amp; DevOps"> Infrastructure &amp; DevOps</label>
+          <label><input type="checkbox" name="sub_scope[]" value="Testing &amp; launch"> Testing &amp; launch</label>
+          <label><input type="checkbox" name="sub_scope[]" value="Everything"> Everything</label>
+        </div>
+      </div>
+      <div class="field"><label class="lbl" for="sub_overall_notes">Anything the team should know before reading your answers?</label><textarea id="sub_overall_notes" name="sub_overall_notes" placeholder="e.g. We are still deciding pricing. The academy director will confirm subjects next week."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 2. ACADEMY IDENTITY & BRANDING ================= -->
+  <section class="card collapsed" data-section="2. Academy Identity &amp; Branding">
+    <button type="button" class="card-head"><span class="num">2</span><h2>Academy Identity &amp; Branding</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Used for the public website, login pages, emails and invoices.</p>
+      <div class="grid2">
+        <div class="field" data-req="1"><label class="lbl" for="ac_legal_name">Academy legal / registered name <span class="req">*</span></label><input id="ac_legal_name" name="ac_legal_name" type="text" placeholder="e.g. Diracha Academy"></div>
+        <div class="field"><label class="lbl" for="ac_brand_name">Brand / display name on the website</label><input id="ac_brand_name" name="ac_brand_name" type="text" placeholder="e.g. Diracha Academy"></div>
+        <div class="field"><label class="lbl" for="ac_short_name">Short name / abbreviation</label><input id="ac_short_name" name="ac_short_name" type="text" placeholder="e.g. DA"></div>
+        <div class="field"><label class="lbl" for="ac_tagline">Tagline / slogan</label><input id="ac_tagline" name="ac_tagline" type="text" placeholder="e.g. Learn. Grow. Excel."></div>
+        <div class="field" data-req="1"><label class="lbl" for="ac_domain">Primary domain name <span class="req">*</span></label><input id="ac_domain" name="ac_domain" type="text" placeholder="e.g. dirachaacademy.com"><div class="hint">If not purchased yet, write “not purchased”.</div></div>
+        <div class="field"><label class="lbl" for="ac_domain_alt">Backup / alternative domain</label><input id="ac_domain_alt" name="ac_domain_alt" type="text" placeholder="e.g. diracha.com.bd"></div>
+        <div class="field"><label class="lbl" for="ac_established">Year established</label><input id="ac_established" name="ac_established" type="text" placeholder="e.g. 2019"></div>
+        <div class="field"><label class="lbl" for="ac_timezone">Business timezone</label><input id="ac_timezone" name="ac_timezone" type="text" placeholder="Asia/Dhaka" value="Asia/Dhaka"></div>
+      </div>
+
+      <div class="sub">Branding assets</div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Do you have a logo file ready?</div>
+          <div class="opts">
+            <label><input type="radio" name="ac_logo_ready" value="Yes"> Yes</label>
+            <label><input type="radio" name="ac_logo_ready" value="No"> No</label>
+            <label><input type="radio" name="ac_logo_ready" value="In progress"> In progress</label>
+          </div>
+        </div>
+        <div class="field"><label class="lbl" for="ac_logo_link">Logo file link (Drive / Dropbox / WeTransfer)</label><input id="ac_logo_link" name="ac_logo_link" type="url" placeholder="https://..."></div>
+        <div class="field"><label class="lbl" for="ac_colors">Brand colours (hex codes)</label><input id="ac_colors" name="ac_colors" type="text" placeholder="#0F766E, #111827, #FFFFFF"></div>
+        <div class="field"><label class="lbl" for="ac_fonts">Brand fonts</label><input id="ac_fonts" name="ac_fonts" type="text" placeholder="e.g. Hind Siliguri, Inter"></div>
+        <div class="field"><label class="lbl" for="ac_guidelines">Brand guidelines file link</label><input id="ac_guidelines" name="ac_guidelines" type="url" placeholder="https://..."></div>
+        <div class="field"><label class="lbl" for="ac_favicon">Favicon ready?</label>
+          <select id="ac_favicon" name="ac_favicon">
+            <option value="">-- Select --</option>
+            <option>Yes</option><option>No</option><option>Not decided</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="sub">Contact information</div>
+      <div class="grid2">
+        <div class="field" data-req="1"><label class="lbl" for="ac_email">Official email address <span class="req">*</span></label><input id="ac_email" name="ac_email" type="email" placeholder="info@dirachaacademy.com"></div>
+        <div class="field"><label class="lbl" for="ac_support_email">Support / help email</label><input id="ac_support_email" name="ac_support_email" type="email" placeholder="support@dirachaacademy.com"></div>
+        <div class="field" data-req="1"><label class="lbl" for="ac_whatsapp">Official WhatsApp number <span class="req">*</span></label><input id="ac_whatsapp" name="ac_whatsapp" type="tel" placeholder="+880 1XXX XXXXXX"><div class="hint">Used for the purchase “Open WhatsApp” button.</div></div>
+        <div class="field"><label class="lbl" for="ac_phone">Official phone number</label><input id="ac_phone" name="ac_phone" type="tel" placeholder="+880 1XXX XXXXXX"></div>
+        <div class="field"><label class="lbl" for="ac_address">Full address</label><input id="ac_address" name="ac_address" type="text" placeholder="Village/Road, Upazila, District, Bangladesh"></div>
+        <div class="field"><label class="lbl" for="ac_map">Google Maps link</label><input id="ac_map" name="ac_map" type="url" placeholder="https://maps.google.com/..."></div>
+        <div class="field"><label class="lbl" for="ac_fb">Facebook page</label><input id="ac_fb" name="ac_fb" type="url" placeholder="https://facebook.com/..."></div>
+        <div class="field"><label class="lbl" for="ac_yt">YouTube channel</label><input id="ac_yt" name="ac_yt" type="url" placeholder="https://youtube.com/@..."></div>
+        <div class="field"><label class="lbl" for="ac_social_other">Other social / links</label><input id="ac_social_other" name="ac_social_other" type="text" placeholder="Instagram, TikTok, Telegram..."></div>
+      </div>
+
+      <div class="field"><label class="lbl" for="ac_description">Short academy description (for public About page)</label><textarea id="ac_description" name="ac_description" placeholder="2–4 sentences about the academy, its mission and who it serves."></textarea></div>
+      <div class="field"><label class="lbl" for="ac_why_us">Why should students choose Diracha Academy?</label><textarea id="ac_why_us" name="ac_why_us" placeholder="Key selling points for the homepage."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 3. CLASSES & PRICING ================= -->
+  <section class="card collapsed" data-section="3. Classes &amp; Pricing">
+    <button type="button" class="card-head"><span class="num">3</span><h2>Classes &amp; Pricing (Class 6–12)</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Reminder: in this system <b>one Class = one purchasable package</b>. Students buy the whole class, never individual subjects. Confirm each class below.</p>
+
+      <div class="classrow"><h4>CLASS 6</h4>
+        <div class="grid3">
+          <div class="field"><label class="lbl" for="c6_status">Status</label><select id="c6_status" name="c6_status"><option value="">-- Select --</option><option>ACTIVE</option><option>INACTIVE</option><option>COMING SOON</option></select></div>
+          <div class="field"><label class="lbl" for="c6_name">Display name</label><input id="c6_name" name="c6_name" type="text" placeholder="Class 6"></div>
+          <div class="field"><label class="lbl" for="c6_price">Price</label><input id="c6_price" name="c6_price" type="text" placeholder="e.g. 5000"></div>
+        </div>
+        <div class="field"><label class="lbl" for="c6_note">Notes for Class 6</label><input id="c6_note" name="c6_note" type="text" placeholder="Optional notes, discounts, special conditions"></div>
+      </div>
+
+      <div class="classrow"><h4>CLASS 7</h4>
+        <div class="grid3">
+          <div class="field"><label class="lbl" for="c7_status">Status</label><select id="c7_status" name="c7_status"><option value="">-- Select --</option><option>ACTIVE</option><option>INACTIVE</option><option>COMING SOON</option></select></div>
+          <div class="field"><label class="lbl" for="c7_name">Display name</label><input id="c7_name" name="c7_name" type="text" placeholder="Class 7"></div>
+          <div class="field"><label class="lbl" for="c7_price">Price</label><input id="c7_price" name="c7_price" type="text" placeholder="e.g. 5000"></div>
+        </div>
+        <div class="field"><label class="lbl" for="c7_note">Notes for Class 7</label><input id="c7_note" name="c7_note" type="text" placeholder="Optional notes"></div>
+      </div>
+
+      <div class="classrow"><h4>CLASS 8</h4>
+        <div class="grid3">
+          <div class="field"><label class="lbl" for="c8_status">Status</label><select id="c8_status" name="c8_status"><option value="">-- Select --</option><option>ACTIVE</option><option>INACTIVE</option><option>COMING SOON</option></select></div>
+          <div class="field"><label class="lbl" for="c8_name">Display name</label><input id="c8_name" name="c8_name" type="text" placeholder="Class 8"></div>
+          <div class="field"><label class="lbl" for="c8_price">Price</label><input id="c8_price" name="c8_price" type="text" placeholder="e.g. 6000"></div>
+        </div>
+        <div class="field"><label class="lbl" for="c8_note">Notes for Class 8</label><input id="c8_note" name="c8_note" type="text" placeholder="Optional notes"></div>
+      </div>
+
+      <div class="classrow"><h4>CLASS 9</h4>
+        <div class="grid3">
+          <div class="field"><label class="lbl" for="c9_status">Status</label><select id="c9_status" name="c9_status"><option value="">-- Select --</option><option>ACTIVE</option><option>INACTIVE</option><option>COMING SOON</option></select></div>
+          <div class="field"><label class="lbl" for="c9_name">Display name</label><input id="c9_name" name="c9_name" type="text" placeholder="Class 9"></div>
+          <div class="field"><label class="lbl" for="c9_price">Price</label><input id="c9_price" name="c9_price" type="text" placeholder="e.g. 7000"></div>
+        </div>
+        <div class="field"><label class="lbl" for="c9_note">Notes for Class 9</label><input id="c9_note" name="c9_note" type="text" placeholder="Optional notes"></div>
+      </div>
+
+      <div class="classrow"><h4>CLASS 10</h4>
+        <div class="grid3">
+          <div class="field"><label class="lbl" for="c10_status">Status</label><select id="c10_status" name="c10_status"><option value="">-- Select --</option><option>ACTIVE</option><option>INACTIVE</option><option>COMING SOON</option></select></div>
+          <div class="field"><label class="lbl" for="c10_name">Display name</label><input id="c10_name" name="c10_name" type="text" placeholder="Class 10"></div>
+          <div class="field"><label class="lbl" for="c10_price">Price</label><input id="c10_price" name="c10_price" type="text" placeholder="e.g. 8000"></div>
+        </div>
+        <div class="field"><label class="lbl" for="c10_note">Notes for Class 10</label><input id="c10_note" name="c10_note" type="text" placeholder="Optional notes"></div>
+      </div>
+
+      <div class="classrow"><h4>CLASS 11</h4>
+        <div class="grid3">
+          <div class="field"><label class="lbl" for="c11_status">Status</label><select id="c11_status" name="c11_status"><option value="">-- Select --</option><option>ACTIVE</option><option>INACTIVE</option><option>COMING SOON</option></select></div>
+          <div class="field"><label class="lbl" for="c11_name">Display name</label><input id="c11_name" name="c11_name" type="text" placeholder="Class 11"></div>
+          <div class="field"><label class="lbl" for="c11_price">Price</label><input id="c11_price" name="c11_price" type="text" placeholder="e.g. 12000"></div>
+        </div>
+        <div class="field"><label class="lbl" for="c11_note">Notes for Class 11</label><input id="c11_note" name="c11_note" type="text" placeholder="Optional notes"></div>
+      </div>
+
+      <div class="classrow"><h4>CLASS 12</h4>
+        <div class="grid3">
+          <div class="field"><label class="lbl" for="c12_status">Status</label><select id="c12_status" name="c12_status"><option value="">-- Select --</option><option>ACTIVE</option><option>INACTIVE</option><option>COMING SOON</option></select></div>
+          <div class="field"><label class="lbl" for="c12_name">Display name</label><input id="c12_name" name="c12_name" type="text" placeholder="Class 12"></div>
+          <div class="field"><label class="lbl" for="c12_price">Price</label><input id="c12_price" name="c12_price" type="text" placeholder="e.g. 14000"></div>
+        </div>
+        <div class="field"><label class="lbl" for="c12_note">Notes for Class 12</label><input id="c12_note" name="c12_note" type="text" placeholder="Optional notes"></div>
+      </div>
+
+      <div class="sub">Pricing policy</div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="price_currency">Currency</label><input id="price_currency" name="price_currency" type="text" placeholder="BDT" value="BDT"></div>
+        <div class="field"><label class="lbl" for="price_change_policy">How often may class prices change?</label><input id="price_change_policy" name="price_change_policy" type="text" placeholder="e.g. Once per academic year"></div>
+      </div>
+      <div class="field"><label class="lbl" for="price_discount">Discount / offer policy</label><textarea id="price_discount" name="price_discount" placeholder="e.g. 20% discount for early admission, no discount after classes start."></textarea></div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Are instalment payments allowed?</div><div class="opts"><label><input type="radio" name="price_installment" value="Yes"> Yes</label><label><input type="radio" name="price_installment" value="No"> No</label><label><input type="radio" name="price_installment" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Sibling / group discount?</div><div class="opts"><label><input type="radio" name="price_sibling" value="Yes"> Yes</label><label><input type="radio" name="price_sibling" value="No"> No</label><label><input type="radio" name="price_sibling" value="Not decided"> Not decided</label></div></div>
+      </div>
+      <div class="field"><label class="lbl" for="price_free_trial">Is there a free trial or demo access?</label><textarea id="price_free_trial" name="price_free_trial" placeholder="e.g. First 3 lessons of every subject are free forever."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 4. SUBJECTS ================= -->
+  <section class="card collapsed" data-section="4. Subjects per Class">
+    <button type="button" class="card-head"><span class="num">4</span><h2>Subjects per Class</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Write the exact subject names for each class, one per line. Subjects are dynamic — the Admin can add or archive subjects later without a code change.</p>
+      <div class="field"><label class="lbl" for="subj_c6">Class 6 subjects</label><textarea id="subj_c6" name="subj_c6" placeholder="Arabic&#10;Bangla&#10;English&#10;Mathematics&#10;Science&#10;ICT&#10;Islamic Studies"></textarea></div>
+      <div class="field"><label class="lbl" for="subj_c7">Class 7 subjects</label><textarea id="subj_c7" name="subj_c7" placeholder="One subject per line..."></textarea></div>
+      <div class="field"><label class="lbl" for="subj_c8">Class 8 subjects</label><textarea id="subj_c8" name="subj_c8" placeholder="One subject per line..."></textarea></div>
+      <div class="field"><label class="lbl" for="subj_c9">Class 9 subjects</label><textarea id="subj_c9" name="subj_c9" placeholder="One subject per line..."></textarea></div>
+      <div class="field"><label class="lbl" for="subj_c10">Class 10 subjects</label><textarea id="subj_c10" name="subj_c10" placeholder="One subject per line..."></textarea></div>
+      <div class="field"><label class="lbl" for="subj_c11">Class 11 subjects (with group if any — Science / Commerce / Arts)</label><textarea id="subj_c11" name="subj_c11" placeholder="One subject per line..."></textarea></div>
+      <div class="field"><label class="lbl" for="subj_c12">Class 12 subjects (with group if any)</label><textarea id="subj_c12" name="subj_c12" placeholder="One subject per line..."></textarea></div>
+
+      <div class="sub">Subject rules</div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="subj_max">Maximum subjects per class</label><input id="subj_max" name="subj_max" type="text" placeholder="e.g. 12"></div>
+        <div class="field"><label class="lbl" for="subj_order">How are subjects ordered for students?</label>
+          <select id="subj_order" name="subj_order"><option value="">-- Select --</option><option>Manual sort order set by Admin</option><option>Alphabetical</option><option>By lesson count</option><option>Not decided</option></select>
+        </div>
+      </div>
+      <div class="field"><label class="lbl" for="subj_archive">What happens when a subject is archived?</label><textarea id="subj_archive" name="subj_archive" placeholder="e.g. Hide from students, keep lessons for records, block new uploads."></textarea></div>
+      <div class="field"><label class="lbl" for="subj_icons">Subject icons / images policy</label><input id="subj_icons" name="subj_icons" type="text" placeholder="e.g. Simple text icons only, no images"></div>
+    </div>
+  </section>
+
+  <!-- ================= 5. LESSONS & FREE/PAID ================= -->
+  <section class="card collapsed" data-section="5. Lessons &amp; Free/Paid Policy">
+    <button type="button" class="card-head"><span class="num">5</span><h2>Lessons &amp; Free/Paid Policy</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <div class="grid2">
+        <div class="field" data-req="1"><label class="lbl" for="free_count">How many free lessons per subject? <span class="req">*</span></label><input id="free_count" name="free_count" type="text" placeholder="e.g. 3 free lessons per subject"></div>
+        <div class="field"><label class="lbl" for="free_who">Who decides which lessons are free?</label>
+          <select id="free_who" name="free_who"><option value="">-- Select --</option><option>Admin decides</option><option>Teacher decides</option><option>Always the first N lessons</option><option>Mixed / case by case</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="free_changeable">Can free lessons be changed after publishing?</label>
+          <select id="free_changeable" name="free_changeable"><option value="">-- Select --</option><option>Yes, anytime</option><option>Yes, with Admin approval</option><option>No, locked after publish</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="lesson_typical_count">Typical number of lessons per subject</label><input id="lesson_typical_count" name="lesson_typical_count" type="text" placeholder="e.g. 20–30"></div>
+      </div>
+
+      <div class="sub">Lesson structure</div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="lesson_numbering">Lesson numbering style</label>
+          <select id="lesson_numbering" name="lesson_numbering"><option value="">-- Select --</option><option>Lesson 1, Lesson 2, Lesson 3…</option><option>Chapter 1, Chapter 2…</option><option>Custom title only, no number</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="lesson_title_format">Lesson title format example</label><input id="lesson_title_format" name="lesson_title_format" type="text" placeholder="e.g. Lesson 3 — Arabic Grammar: Noun Types"></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><div class="lbl">Is a video mandatory for every lesson?</div><div class="opts"><label><input type="radio" name="lesson_video_mandatory" value="Yes"> Yes</label><label><input type="radio" name="lesson_video_mandatory" value="No"> No</label><label><input type="radio" name="lesson_video_mandatory" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Is a PDF mandatory for every lesson?</div><div class="opts"><label><input type="radio" name="lesson_pdf_mandatory" value="Yes"> Yes</label><label><input type="radio" name="lesson_pdf_mandatory" value="No"> No</label><label><input type="radio" name="lesson_pdf_mandatory" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Lesson description required?</div><div class="opts"><label><input type="radio" name="lesson_desc_required" value="Yes"> Yes</label><label><input type="radio" name="lesson_desc_required" value="No"> No</label></div></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><div class="lbl">Multiple videos per lesson allowed?</div><div class="opts"><label><input type="radio" name="lesson_multi_video" value="Yes"> Yes</label><label><input type="radio" name="lesson_multi_video" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Multiple PDFs per lesson allowed?</div><div class="opts"><label><input type="radio" name="lesson_multi_pdf" value="Yes"> Yes</label><label><input type="radio" name="lesson_multi_pdf" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Lesson thumbnail required?</div><div class="opts"><label><input type="radio" name="lesson_thumb" value="Yes"> Yes</label><label><input type="radio" name="lesson_thumb" value="No"> No</label></div></div>
+      </div>
+
+      <div class="sub">Publishing workflow</div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="publish_approval">Who can publish a lesson to students?</label>
+          <select id="publish_approval" name="publish_approval"><option value="">-- Select --</option><option>Teacher publishes directly</option><option>Teacher submits, Admin must approve</option><option>Admin only</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="publish_draft_visible">Can students see DRAFT lessons?</label>
+          <select id="publish_draft_visible" name="publish_draft_visible"><option value="">-- Select --</option><option>No — never</option><option>Yes — preview only for Admin</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="lesson_delete_policy">Lesson deletion policy</label>
+          <select id="lesson_delete_policy" name="lesson_delete_policy"><option value="">-- Select --</option><option>Soft delete / archive only</option><option>Hard delete allowed by Admin</option><option>Never delete, archive only</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="lesson_archive_behavior">What should happen to archived lessons?</label>
+          <select id="lesson_archive_behavior" name="lesson_archive_behavior"><option value="">-- Select --</option><option>Hidden from students, visible to Admin/Teacher</option><option>Completely hidden everywhere</option><option>Remain visible but marked archived</option><option>Not decided</option></select>
+        </div>
+      </div>
+      <div class="field"><label class="lbl" for="lesson_extra_rules">Any other lesson rules?</label><textarea id="lesson_extra_rules" name="lesson_extra_rules" placeholder="e.g. Lessons must be at least 5 minutes. No lesson may be published without a PDF summary."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 6. STUDENT REGISTRATION ================= -->
+  <section class="card collapsed" data-section="6. Student Registration &amp; Identity">
+    <button type="button" class="card-head"><span class="num">6</span><h2>Student Registration &amp; Identity</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Locked rule: students self-register with phone + OTP, provide identity information, then create a password.</p>
+      <div class="field"><div class="lbl">Which fields should appear in the student registration form?</div>
+        <div class="opts">
+          <label><input type="checkbox" name="reg_fields[]" value="Full name"> Full name</label>
+          <label><input type="checkbox" name="reg_fields[]" value="Gender"> Gender</label>
+          <label><input type="checkbox" name="reg_fields[]" value="Class"> Class</label>
+          <label><input type="checkbox" name="reg_fields[]" value="Institution name"> Institution name</label>
+          <label><input type="checkbox" name="reg_fields[]" value="District"> District</label>
+          <label><input type="checkbox" name="reg_fields[]" value="Email (optional)"> Email (optional)</label>
+          <label><input type="checkbox" name="reg_fields[]" value="Guardian name"> Guardian name</label>
+          <label><input type="checkbox" name="reg_fields[]" value="Guardian phone"> Guardian phone</label>
+          <label><input type="checkbox" name="reg_fields[]" value="Date of birth"> Date of birth</label>
+          <label><input type="checkbox" name="reg_fields[]" value="Full address"> Full address</label>
+          <label><input type="checkbox" name="reg_fields[]" value="Student photo"> Student photo</label>
+          <label><input type="checkbox" name="reg_fields[]" value="Student ID / roll number"> Student ID / roll number</label>
+          <label><input type="checkbox" name="reg_fields[]" value="Referral source"> How did you hear about us?</label>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="reg_gender_options">Gender options</label><input id="reg_gender_options" name="reg_gender_options" type="text" placeholder="Male, Female, Other" value="Male, Female"></div>
+        <div class="field"><label class="lbl" for="reg_district_source">District selection method</label>
+          <select id="reg_district_source" name="reg_district_source"><option value="">-- Select --</option><option>Fixed dropdown list of 64 districts</option><option>Free text</option><option>Dropdown + other</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="reg_institution">Institution field type</label>
+          <select id="reg_institution" name="reg_institution"><option value="">-- Select --</option><option>Free text</option><option>Dropdown of known schools</option><option>Both</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="reg_class_choice">How is the student's class chosen at registration?</label>
+          <select id="reg_class_choice" name="reg_class_choice"><option value="">-- Select --</option><option>Student selects their class</option><option>Admin assigns after registration</option><option>Student selects, Admin can correct</option><option>Not decided</option></select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Can a student change their class later?</div><div class="opts"><label><input type="radio" name="reg_class_change" value="Yes"> Yes</label><label><input type="radio" name="reg_class_change" value="No"> No</label><label><input type="radio" name="reg_class_change" value="Only with Admin approval"> Only with Admin approval</label><label><input type="radio" name="reg_class_change" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Is Terms &amp; Privacy acceptance required at registration?</div><div class="opts"><label><input type="radio" name="reg_terms" value="Yes"> Yes</label><label><input type="radio" name="reg_terms" value="No"> No</label><label><input type="radio" name="reg_terms" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Is guardian consent required for minors?</div><div class="opts"><label><input type="radio" name="reg_guardian_consent" value="Yes"> Yes</label><label><input type="radio" name="reg_guardian_consent" value="No"> No</label><label><input type="radio" name="reg_guardian_consent" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Can a student register with an email instead of phone?</div><div class="opts"><label><input type="radio" name="reg_email_login" value="Yes"> Yes</label><label><input type="radio" name="reg_email_login" value="No — phone only"> No — phone only</label><label><input type="radio" name="reg_email_login" value="Not decided"> Not decided</label></div></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="reg_age_min">Minimum age allowed</label><input id="reg_age_min" name="reg_age_min" type="text" placeholder="e.g. 10 years"></div>
+        <div class="field"><label class="lbl" for="reg_duplicate_phone">If the phone number is already registered, what should happen?</label>
+          <select id="reg_duplicate_phone" name="reg_duplicate_phone"><option value="">-- Select --</option><option>Block and tell user to log in</option><option>Show password reset option</option><option>Allow second account</option><option>Not decided</option></select>
+        </div>
+      </div>
+      <div class="field"><label class="lbl" for="reg_required_list">Which registration fields are strictly required?</label><textarea id="reg_required_list" name="reg_required_list" placeholder="e.g. Name, phone, class, district, institution are required. Email and guardian phone are optional."></textarea></div>
+      <div class="field"><label class="lbl" for="reg_extra_rules">Any additional registration rules?</label><textarea id="reg_extra_rules" name="reg_extra_rules" placeholder="e.g. A student may only have one account. Duplicate accounts will be suspended."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 7. AUTHENTICATION & SECURITY ================= -->
+  <section class="card collapsed" data-section="7. Authentication &amp; Security">
+    <button type="button" class="card-head"><span class="num">7</span><h2>Authentication &amp; Security</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Locked rule: one active device/session per account. A new login revokes the previous session.</p>
+      <div class="grid3">
+        <div class="field"><label class="lbl" for="login_student">Student login identifier</label><select id="login_student" name="login_student"><option value="">-- Select --</option><option>Phone + password</option><option>Phone + OTP</option><option>Email + password</option><option>Student ID + password</option></select></div>
+        <div class="field"><label class="lbl" for="login_teacher">Teacher login identifier</label><select id="login_teacher" name="login_teacher"><option value="">-- Select --</option><option>Phone + password</option><option>Email + password</option><option>Teacher ID + password</option><option>Not decided</option></select></div>
+        <div class="field"><label class="lbl" for="login_admin">Admin login identifier</label><select id="login_admin" name="login_admin"><option value="">-- Select --</option><option>Email + password</option><option>Username + password</option><option>Email + password + 2FA</option><option>Not decided</option></select></div>
+      </div>
+
+      <div class="sub">Session policy</div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="session_strategy">Session mechanism</label>
+          <select id="session_strategy" name="session_strategy"><option value="">-- Select --</option><option>Secure HTTP-only cookie + server session (recommended)</option><option>Short-lived access token + refresh token + server session</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="session_ttl">How long should a login stay active?</label><input id="session_ttl" name="session_ttl" type="text" placeholder="e.g. 7 days of inactivity"></div>
+        <div class="field"><label class="lbl" for="session_idle">Idle timeout</label><input id="session_idle" name="session_idle" type="text" placeholder="e.g. 60 minutes"></div>
+        <div class="field"><label class="lbl" for="device_id_method">How is a device identified?</label>
+          <select id="device_id_method" name="device_id_method"><option value="">-- Select --</option><option>Generated device ID stored in browser</option><option>Fingerprint (browser + OS)</option><option>Both</option><option>Not decided</option></select>
+        </div>
+      </div>
+      <div class="field"><label class="lbl" for="old_device_message">Message shown on the old device after being logged out</label><textarea id="old_device_message" name="old_device_message" placeholder="Your account was logged out because it was accessed from another device. Please log in again.">Your account was logged out because it was accessed from another device. Please log in again.</textarea></div>
+
+      <div class="sub">OTP policy</div>
+      <div class="grid3">
+        <div class="field"><label class="lbl" for="otp_length">OTP length (digits)</label><input id="otp_length" name="otp_length" type="text" placeholder="6" value="6"></div>
+        <div class="field"><label class="lbl" for="otp_expiry">OTP validity</label><input id="otp_expiry" name="otp_expiry" type="text" placeholder="e.g. 5 minutes"></div>
+        <div class="field"><label class="lbl" for="otp_attempts">Max OTP verification attempts</label><input id="otp_attempts" name="otp_attempts" type="text" placeholder="e.g. 5"></div>
+        <div class="field"><label class="lbl" for="otp_resend">Resend cooldown</label><input id="otp_resend" name="otp_resend" type="text" placeholder="e.g. 60 seconds"></div>
+        <div class="field"><label class="lbl" for="otp_daily">Max OTP requests per phone per day</label><input id="otp_daily" name="otp_daily" type="text" placeholder="e.g. 10"></div>
+        <div class="field"><label class="lbl" for="otp_provider">SMS / OTP provider</label>
+          <select id="otp_provider" name="otp_provider"><option value="">-- Select --</option><option>SSL Wireless</option><option>Alpha SMS</option><option>Bulk SMS BD</option><option>Twilio</option><option>Local Bangladeshi gateway</option><option>Other</option><option>Not decided</option></select>
+        </div>
+      </div>
+
+      <div class="sub">Password policy</div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="pwd_min">Minimum password length</label><input id="pwd_min" name="pwd_min" type="text" placeholder="e.g. 8 characters"></div>
+        <div class="field"><label class="lbl" for="pwd_reuse">Password reuse restriction</label><input id="pwd_reuse" name="pwd_reuse" type="text" placeholder="e.g. Cannot reuse last 3 passwords"></div>
+      </div>
+      <div class="field"><div class="lbl">Password complexity requirements</div>
+        <div class="opts">
+          <label><input type="checkbox" name="pwd_rules[]" value="At least 1 uppercase letter"> 1 uppercase letter</label>
+          <label><input type="checkbox" name="pwd_rules[]" value="At least 1 lowercase letter"> 1 lowercase letter</label>
+          <label><input type="checkbox" name="pwd_rules[]" value="At least 1 number"> 1 number</label>
+          <label><input type="checkbox" name="pwd_rules[]" value="At least 1 symbol"> 1 symbol</label>
+          <label><input type="checkbox" name="pwd_rules[]" value="No spaces"> No spaces</label>
+          <label><input type="checkbox" name="pwd_rules[]" value="No complexity beyond length"> No complexity beyond length</label>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Does password reset revoke all active sessions?</div><div class="opts"><label><input type="radio" name="pwd_reset_revoke" value="Yes"> Yes</label><label><input type="radio" name="pwd_reset_revoke" value="No"> No</label><label><input type="radio" name="pwd_reset_revoke" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Is two-factor authentication required for Admin?</div><div class="opts"><label><input type="radio" name="admin_2fa" value="Yes"> Yes</label><label><input type="radio" name="admin_2fa" value="No"> No</label><label><input type="radio" name="admin_2fa" value="Optional"> Optional</label><label><input type="radio" name="admin_2fa" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Is two-factor authentication required for Teachers?</div><div class="opts"><label><input type="radio" name="teacher_2fa" value="Yes"> Yes</label><label><input type="radio" name="teacher_2fa" value="No"> No</label><label><input type="radio" name="teacher_2fa" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Is two-factor authentication available for Students?</div><div class="opts"><label><input type="radio" name="student_2fa" value="Yes"> Yes</label><label><input type="radio" name="student_2fa" value="No"> No</label><label><input type="radio" name="student_2fa" value="Not decided"> Not decided</label></div></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="lockout_threshold">Failed login attempts before lockout</label><input id="lockout_threshold" name="lockout_threshold" type="text" placeholder="e.g. 5 attempts"></div>
+        <div class="field"><label class="lbl" for="lockout_duration">Lockout duration</label><input id="lockout_duration" name="lockout_duration" type="text" placeholder="e.g. 15 minutes"></div>
+      </div>
+
+      <div class="sub">Rate limits (requests allowed)</div>
+      <div class="grid3">
+        <div class="field"><label class="lbl" for="rate_login">Login limit</label><input id="rate_login" name="rate_login" type="text" placeholder="e.g. 10 per 15 min per phone+IP"></div>
+        <div class="field"><label class="lbl" for="rate_register">Registration limit</label><input id="rate_register" name="rate_register" type="text" placeholder="e.g. 5 per hour per IP"></div>
+        <div class="field"><label class="lbl" for="rate_otp_send">OTP send limit</label><input id="rate_otp_send" name="rate_otp_send" type="text" placeholder="e.g. 3 per 15 min per phone"></div>
+        <div class="field"><label class="lbl" for="rate_otp_verify">OTP verify limit</label><input id="rate_otp_verify" name="rate_otp_verify" type="text" placeholder="e.g. 10 per hour per phone"></div>
+        <div class="field"><label class="lbl" for="rate_pwd_reset">Password reset limit</label><input id="rate_pwd_reset" name="rate_pwd_reset" type="text" placeholder="e.g. 3 per hour per phone"></div>
+        <div class="field"><label class="lbl" for="rate_purchase">Purchase submission limit</label><input id="rate_purchase" name="rate_purchase" type="text" placeholder="e.g. 5 per day per student"></div>
+      </div>
+
+      <div class="sub">Admin account &amp; recovery</div>
+      <div class="field"><label class="lbl" for="admin_recovery">If the single Admin loses access, how should recovery work?</label><textarea id="admin_recovery" name="admin_recovery" placeholder="e.g. Written request from academy director + emergency recovery key stored offline."></textarea></div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Should Admin access be restricted by IP address?</div><div class="opts"><label><input type="radio" name="admin_ip_restrict" value="Yes"> Yes</label><label><input type="radio" name="admin_ip_restrict" value="No"> No</label><label><input type="radio" name="admin_ip_restrict" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Should a second Admin ever be allowed in future?</div><div class="opts"><label><input type="radio" name="admin_second" value="No — exactly one Admin forever"> No — exactly one Admin forever</label><label><input type="radio" name="admin_second" value="Yes — in a future version"> Yes — in a future version</label><label><input type="radio" name="admin_second" value="Not decided"> Not decided</label></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 8. PURCHASE & PAYMENT ================= -->
+  <section class="card collapsed" data-section="8. Purchase &amp; Payment">
+    <button type="button" class="card-head"><span class="num">8</span><h2>Purchase &amp; Payment Process</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Locked rule: no in-app payment gateway. Payment happens externally, then Admin accepts or rejects the request in the LMS.</p>
+      <div class="field" data-req="1"><div class="lbl">Which payment methods does the academy accept? <span class="req">*</span></div>
+        <div class="opts">
+          <label><input type="checkbox" name="pay_methods[]" value="bKash"> bKash</label>
+          <label><input type="checkbox" name="pay_methods[]" value="Nagad"> Nagad</label>
+          <label><input type="checkbox" name="pay_methods[]" value="Rocket"> Rocket</label>
+          <label><input type="checkbox" name="pay_methods[]" value="Upay"> Upay</label>
+          <label><input type="checkbox" name="pay_methods[]" value="Bank transfer"> Bank transfer</label>
+          <label><input type="checkbox" name="pay_methods[]" value="Cash in person"> Cash in person</label>
+          <label><input type="checkbox" name="pay_methods[]" value="Other"> Other</label>
+        </div>
+      </div>
+      <div class="field" data-req="1"><label class="lbl" for="pay_instructions">Exact payment instructions shown to the student <span class="req">*</span></label><textarea id="pay_instructions" name="pay_instructions" placeholder="e.g. Send 5000 BDT to bKash 01711-XXXXXX (Personal). Use your registered phone number as reference. Then send the screenshot on WhatsApp."></textarea><div class="hint">This text appears on the Buy page and in the WhatsApp message.</div></div>
+      <div class="grid2">
+        <div class="field" data-req="1"><label class="lbl" for="pay_number">Payment number / account number <span class="req">*</span></label><input id="pay_number" name="pay_number" type="text" placeholder="e.g. bKash: 01711-XXXXXX"></div>
+        <div class="field"><label class="lbl" for="pay_account_name">Account holder name</label><input id="pay_account_name" name="pay_account_name" type="text" placeholder="e.g. Diracha Academy / Md. ..."></div>
+        <div class="field"><label class="lbl" for="pay_bank_details">Bank details (if applicable)</label><input id="pay_bank_details" name="pay_bank_details" type="text" placeholder="Bank name, branch, account number, routing number"></div>
+        <div class="field"><label class="lbl" for="pay_reference">Payment reference / note format</label><input id="pay_reference" name="pay_reference" type="text" placeholder="e.g. Student phone number"></div>
+      </div>
+
+      <div class="sub">Payment proof</div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Is payment proof required before submitting the request?</div><div class="opts"><label><input type="radio" name="pay_proof_required" value="Yes"> Yes</label><label><input type="radio" name="pay_proof_required" value="No"> No</label><label><input type="radio" name="pay_proof_required" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><label class="lbl" for="pay_proof_type">Type of proof</label>
+          <select id="pay_proof_type" name="pay_proof_type"><option value="">-- Select --</option><option>Screenshot upload</option><option>Transaction ID text only</option><option>Both screenshot and transaction ID</option><option>No proof needed in the LMS (handled on WhatsApp)</option><option>Not decided</option></select>
+        </div>
+      </div>
+      <div class="field"><label class="lbl" for="pay_form_fields">What should the student fill in the Buy / payment information form?</label><textarea id="pay_form_fields" name="pay_form_fields" placeholder="e.g. Payment method, sender number, transaction ID, amount paid, date of payment, note."></textarea></div>
+
+      <div class="sub">WhatsApp hand-off</div>
+      <div class="field"><label class="lbl" for="wa_template">WhatsApp message template (prefilled)</label><textarea id="wa_template" name="wa_template" placeholder="Assalamu Alaikum. I am [Student Name], phone [Phone]. I want to buy [Class Name] for [Price] BDT. My payment method is [Method] and transaction ID is [Txn ID]. Please confirm."></textarea></div>
+      <div class="field"><label class="lbl" for="wa_number">WhatsApp number for purchases</label><input id="wa_number" name="wa_number" type="tel" placeholder="+880 1XXX XXXXXX"></div>
+
+      <div class="sub">Admin review rules</div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="purchase_duplicate">If a student already has a pending request</label>
+          <select id="purchase_duplicate" name="purchase_duplicate"><option value="">-- Select --</option><option>Block new request</option><option>Allow new request and cancel old</option><option>Allow multiple requests</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="purchase_expiry">Should pending requests expire automatically?</label><input id="purchase_expiry" name="purchase_expiry" type="text" placeholder="e.g. Auto-cancel after 7 days"></div>
+        <div class="field"><label class="lbl" for="purchase_sla">Approval time target (SLA)</label><input id="purchase_sla" name="purchase_sla" type="text" placeholder="e.g. Within 24 hours"></div>
+        <div class="field"><label class="lbl" for="purchase_approver">Who reviews and approves purchases?</label><input id="purchase_approver" name="purchase_approver" type="text" placeholder="e.g. Academy Admin only"></div>
+      </div>
+      <div class="field"><div class="lbl">Notification events the student should receive</div>
+        <div class="opts">
+          <label><input type="checkbox" name="pay_notify[]" value="Request submitted"> Request submitted</label>
+          <label><input type="checkbox" name="pay_notify[]" value="Request under review"> Under review</label>
+          <label><input type="checkbox" name="pay_notify[]" value="Request accepted"> Accepted</label>
+          <label><input type="checkbox" name="pay_notify[]" value="Request rejected"> Rejected</label>
+          <label><input type="checkbox" name="pay_notify[]" value="Enrollment expiring soon"> Enrollment expiring soon</label>
+          <label><input type="checkbox" name="pay_notify[]" value="Enrollment expired"> Enrollment expired</label>
+        </div>
+      </div>
+      <div class="field"><label class="lbl" for="reject_reasons">Allowed rejection reasons</label><textarea id="reject_reasons" name="reject_reasons" placeholder="e.g. Payment not received, wrong amount, duplicate request, invalid transaction ID."></textarea></div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Is a rejection reason mandatory?</div><div class="opts"><label><input type="radio" name="reject_reason_required" value="Yes"> Yes</label><label><input type="radio" name="reject_reason_required" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Can the student cancel their own pending request?</div><div class="opts"><label><input type="radio" name="purchase_cancel" value="Yes"> Yes</label><label><input type="radio" name="purchase_cancel" value="No"> No</label><label><input type="radio" name="purchase_cancel" value="Not decided"> Not decided</label></div></div>
+      </div>
+      <div class="field"><label class="lbl" for="refund_policy">Refund policy summary</label><textarea id="refund_policy" name="refund_policy" placeholder="e.g. No refund after enrollment is activated. Refund only if the class is cancelled by the academy."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 9. ENROLLMENT POLICY ================= -->
+  <section class="card collapsed" data-section="9. Enrollment Policy">
+    <button type="button" class="card-head"><span class="num">9</span><h2>Enrollment Policy</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Locked rule: Class 6–10 = 1 year, Class 11–12 = 2 years. The expiry date is stored once and never recalculated.</p>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="enroll_duration_6_10">Confirmed duration for Classes 6–10</label><input id="enroll_duration_6_10" name="enroll_duration_6_10" type="text" placeholder="1 year" value="1 year"></div>
+        <div class="field"><label class="lbl" for="enroll_duration_11_12">Confirmed duration for Classes 11–12</label><input id="enroll_duration_11_12" name="enroll_duration_11_12" type="text" placeholder="2 years" value="2 years"></div>
+        <div class="field"><label class="lbl" for="enroll_start_rule">When does the enrollment period start?</label>
+          <select id="enroll_start_rule" name="enroll_start_rule"><option value="">-- Select --</option><option>Date Admin accepts the purchase</option><option>Date of payment</option><option>Fixed academic year start date</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="enroll_grace">Grace period after expiry (days)</label><input id="enroll_grace" name="enroll_grace" type="text" placeholder="e.g. 0 days / 7 days"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Should the student get a reminder before expiry?</div><div class="opts"><label><input type="radio" name="enroll_reminder" value="Yes"> Yes</label><label><input type="radio" name="enroll_reminder" value="No"> No</label><label><input type="radio" name="enroll_reminder" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><label class="lbl" for="enroll_reminder_days">Reminder timing</label><input id="enroll_reminder_days" name="enroll_reminder_days" type="text" placeholder="e.g. 7 days before, 1 day before"></div>
+      </div>
+      <div class="field"><label class="lbl" for="enroll_after_expiry">What can a student access after expiry?</label>
+        <select id="enroll_after_expiry" name="enroll_after_expiry"><option value="">-- Select --</option><option>Free lessons only</option><option>Nothing — must renew</option><option>Read-only access to old lessons</option><option>Not decided</option></select>
+      </div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Is renewal allowed?</div><div class="opts"><label><input type="radio" name="enroll_renewal" value="Yes"> Yes</label><label><input type="radio" name="enroll_renewal" value="No"> No</label><label><input type="radio" name="enroll_renewal" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><label class="lbl" for="enroll_renewal_rule">Renewal rule</label><input id="enroll_renewal_rule" name="enroll_renewal_rule" type="text" placeholder="e.g. New 1-year period starts from the old expiry date"></div>
+        <div class="field"><div class="lbl">Can a student enroll in more than one class at a time?</div><div class="opts"><label><input type="radio" name="enroll_multi" value="Yes"> Yes</label><label><input type="radio" name="enroll_multi" value="No"> No</label><label><input type="radio" name="enroll_multi" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Can an enrollment be revoked by Admin?</div><div class="opts"><label><input type="radio" name="enroll_revoke" value="Yes"> Yes</label><label><input type="radio" name="enroll_revoke" value="No"> No</label></div></div>
+      </div>
+      <div class="field"><label class="lbl" for="enroll_revoke_reasons">Valid reasons for revoking an enrollment</label><textarea id="enroll_revoke_reasons" name="enroll_revoke_reasons" placeholder="e.g. Payment reversed, fraud, disciplinary action, duplicate account."></textarea></div>
+      <div class="field"><label class="lbl" for="enroll_upgrade">What happens if a student is promoted to the next class?</label><textarea id="enroll_upgrade" name="enroll_upgrade" placeholder="e.g. Old enrollment stays as history. Student must buy the new class separately."></textarea></div>
+      <div class="field"><label class="lbl" for="enroll_transfer">Is enrollment transferable to another student?</label>
+        <select id="enroll_transfer" name="enroll_transfer"><option value="">-- Select --</option><option>No, never</option><option>Yes, with Admin approval</option><option>Not decided</option></select>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 10. TEACHER ACCOUNTS ================= -->
+  <section class="card collapsed" data-section="10. Teacher Accounts">
+    <button type="button" class="card-head"><span class="num">10</span><h2>Teacher Accounts &amp; Permissions</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Locked rule: teachers cannot self-register. Only Admin creates teacher accounts and assigns Class + Subject.</p>
+      <div class="grid2">
+        <div class="field" data-req="1"><label class="lbl" for="teacher_id_format">Teacher ID / username format <span class="req">*</span></label><input id="teacher_id_format" name="teacher_id_format" type="text" placeholder="e.g. TCH-001 or teacher's phone number"></div>
+        <div class="field"><label class="lbl" for="teacher_cred_delivery">How are credentials delivered to the teacher?</label>
+          <select id="teacher_cred_delivery" name="teacher_cred_delivery"><option value="">-- Select --</option><option>Admin tells them directly</option><option>Email</option><option>SMS</option><option>WhatsApp</option><option>Printed sheet</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="teacher_expected">How many teachers do you expect?</label><input id="teacher_expected" name="teacher_expected" type="text" placeholder="e.g. 15 teachers"></div>
+        <div class="field"><label class="lbl" for="teacher_login_method">Teacher login method</label><input id="teacher_login_method" name="teacher_login_method" type="text" placeholder="e.g. Phone number + password"></div>
+      </div>
+      <div class="field"><div class="lbl">Which teacher profile fields should be stored?</div>
+        <div class="opts">
+          <label><input type="checkbox" name="teacher_fields[]" value="Full name"> Full name</label>
+          <label><input type="checkbox" name="teacher_fields[]" value="Phone"> Phone</label>
+          <label><input type="checkbox" name="teacher_fields[]" value="Email"> Email</label>
+          <label><input type="checkbox" name="teacher_fields[]" value="Photo"> Photo</label>
+          <label><input type="checkbox" name="teacher_fields[]" value="Qualification"> Qualification</label>
+          <label><input type="checkbox" name="teacher_fields[]" value="Subject expertise"> Subject expertise</label>
+          <label><input type="checkbox" name="teacher_fields[]" value="Joining date"> Joining date</label>
+          <label><input type="checkbox" name="teacher_fields[]" value="National ID"> National ID</label>
+          <label><input type="checkbox" name="teacher_fields[]" value="Address"> Address</label>
+          <label><input type="checkbox" name="teacher_fields[]" value="Emergency contact"> Emergency contact</label>
+        </div>
+      </div>
+      <div class="sub">Teacher permissions</div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Can a teacher be assigned to more than one Class + Subject?</div><div class="opts"><label><input type="radio" name="teacher_multi_assign" value="Yes"> Yes</label><label><input type="radio" name="teacher_multi_assign" value="No"> No</label><label><input type="radio" name="teacher_multi_assign" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Can two teachers be assigned to the same Class + Subject?</div><div class="opts"><label><input type="radio" name="teacher_shared_subject" value="Yes"> Yes</label><label><input type="radio" name="teacher_shared_subject" value="No"> No</label><label><input type="radio" name="teacher_shared_subject" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Can a teacher edit another teacher's lessons in the same subject?</div><div class="opts"><label><input type="radio" name="teacher_edit_others" value="Yes"> Yes</label><label><input type="radio" name="teacher_edit_others" value="No"> No</label><label><input type="radio" name="teacher_edit_others" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Can a teacher publish lessons without approval?</div><div class="opts"><label><input type="radio" name="teacher_publish" value="Yes"> Yes</label><label><input type="radio" name="teacher_publish" value="No"> No</label><label><input type="radio" name="teacher_publish" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Can a teacher delete media they uploaded?</div><div class="opts"><label><input type="radio" name="teacher_delete_media" value="Yes"> Yes</label><label><input type="radio" name="teacher_delete_media" value="No"> No</label><label><input type="radio" name="teacher_delete_media" value="Only drafts"> Only drafts</label></div></div>
+        <div class="field"><div class="lbl">Can a teacher see student identity data?</div><div class="opts"><label><input type="radio" name="teacher_see_students" value="No — never"> No — never</label><label><input type="radio" name="teacher_see_students" value="Yes — limited"> Yes — limited</label><label><input type="radio" name="teacher_see_students" value="Not decided"> Not decided</label></div></div>
+      </div>
+      <div class="field"><label class="lbl" for="teacher_self_edit">Which of their own profile fields can a teacher edit?</label><textarea id="teacher_self_edit" name="teacher_self_edit" placeholder="e.g. Photo, phone, password. Not name or assignments."></textarea></div>
+      <div class="field"><label class="lbl" for="teacher_payment_model">How are teachers paid or evaluated?</label><textarea id="teacher_payment_model" name="teacher_payment_model" placeholder="e.g. Fixed monthly salary. Lesson count is tracked for reporting only."></textarea></div>
+      <div class="field"><label class="lbl" for="teacher_disable_effect">What happens when a teacher account is disabled?</label><textarea id="teacher_disable_effect" name="teacher_disable_effect" placeholder="e.g. Immediate logout, lessons stay published, Admin reassigns the subject."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 11. ADMIN ACCOUNT ================= -->
+  <section class="card collapsed" data-section="11. Admin Account">
+    <button type="button" class="card-head"><span class="num">11</span><h2>Admin Account</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Locked rule: exactly one Admin account, created only through a secure deployment bootstrap. There is no public admin registration.</p>
+      <div class="grid2">
+        <div class="field" data-req="1"><label class="lbl" for="admin_name">Admin full name <span class="req">*</span></label><input id="admin_name" name="admin_name" type="text" placeholder="Who will be the single Admin?"></div>
+        <div class="field" data-req="1"><label class="lbl" for="admin_email_input">Admin email <span class="req">*</span></label><input id="admin_email_input" name="admin_email_input" type="email" placeholder="admin@dirachaacademy.com"></div>
+        <div class="field"><label class="lbl" for="admin_phone_input">Admin phone</label><input id="admin_phone_input" name="admin_phone_input" type="tel" placeholder="+880 1XXX XXXXXX"></div>
+        <div class="field"><label class="lbl" for="admin_username">Admin username (if used)</label><input id="admin_username" name="admin_username" type="text" placeholder="e.g. admin"></div>
+        <div class="field"><label class="lbl" for="admin_bootstrap_who">Who will run the secure admin bootstrap?</label><input id="admin_bootstrap_who" name="admin_bootstrap_who" type="text" placeholder="e.g. DevOps engineer at deployment time"></div>
+        <div class="field"><label class="lbl" for="admin_session_ttl">Admin session length</label><input id="admin_session_ttl" name="admin_session_ttl" type="text" placeholder="e.g. 8 hours"></div>
+      </div>
+      <div class="field"><label class="lbl" for="admin_permissions">What should the Admin be able to do?</label><textarea id="admin_permissions" name="admin_permissions" placeholder="e.g. Manage students, teachers, classes, subjects, assignments, purchases, enrollments, audit logs, settings."></textarea></div>
+      <div class="field"><label class="lbl" for="admin_recovery_plan">Admin recovery plan (in detail)</label><textarea id="admin_recovery_plan" name="admin_recovery_plan" placeholder="If the Admin loses access: who can restore it, with what proof, using what procedure?"></textarea></div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Should the Admin be forced to change the initial password on first login?</div><div class="opts"><label><input type="radio" name="admin_force_change" value="Yes"> Yes</label><label><input type="radio" name="admin_force_change" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Should Admin actions be exportable as audit reports?</div><div class="opts"><label><input type="radio" name="admin_audit_export" value="Yes"> Yes</label><label><input type="radio" name="admin_audit_export" value="No"> No</label><label><input type="radio" name="admin_audit_export" value="Not decided"> Not decided</label></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 12. VIDEO MEDIA ================= -->
+  <section class="card collapsed" data-section="12. Video Media (Bunny.net)">
+    <button type="button" class="card-head"><span class="num">12</span><h2>Video Media (Bunny.net)</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Locked rule: video is delivered through Bunny.net. Video never passes through the application server.</p>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="video_max_size">Maximum video file size</label><input id="video_max_size" name="video_max_size" type="text" placeholder="e.g. 2 GB per video"></div>
+        <div class="field"><label class="lbl" for="video_max_duration">Maximum video duration</label><input id="video_max_duration" name="video_max_duration" type="text" placeholder="e.g. 45 minutes"></div>
+        <div class="field"><label class="lbl" for="video_formats">Accepted video formats</label><input id="video_formats" name="video_formats" type="text" placeholder="MP4, MOV, MKV"></div>
+        <div class="field"><label class="lbl" for="video_resolution">Minimum video resolution</label><input id="video_resolution" name="video_resolution" type="text" placeholder="e.g. 720p minimum, 1080p preferred"></div>
+        <div class="field"><label class="lbl" for="video_storage_estimate">Estimated total video storage</label><input id="video_storage_estimate" name="video_storage_estimate" type="text" placeholder="e.g. 500 GB in first year"></div>
+        <div class="field"><label class="lbl" for="video_thumbnail">Video thumbnail source</label>
+          <select id="video_thumbnail" name="video_thumbnail"><option value="">-- Select --</option><option>Auto-generated by Bunny</option><option>Uploaded manually by teacher</option><option>Not needed</option><option>Not decided</option></select>
+        </div>
+      </div>
+      <div class="grid3">
+        <div class="field"><div class="lbl">Token / signed playback required?</div><div class="opts"><label><input type="radio" name="video_token" value="Yes"> Yes</label><label><input type="radio" name="video_token" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Allow video download?</div><div class="opts"><label><input type="radio" name="video_download" value="No"> No</label><label><input type="radio" name="video_download" value="Yes"> Yes</label></div></div>
+        <div class="field"><div class="lbl">Watermark with student phone/ID?</div><div class="opts"><label><input type="radio" name="video_watermark" value="Yes"> Yes</label><label><input type="radio" name="video_watermark" value="No"> No</label><label><input type="radio" name="video_watermark" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Playback speed control?</div><div class="opts"><label><input type="radio" name="video_speed" value="Yes"> Yes</label><label><input type="radio" name="video_speed" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Remember/resume last position?</div><div class="opts"><label><input type="radio" name="video_resume" value="Yes"> Yes</label><label><input type="radio" name="video_resume" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">DRM required?</div><div class="opts"><label><input type="radio" name="video_drm" value="No"> No</label><label><input type="radio" name="video_drm" value="Yes"> Yes</label><label><input type="radio" name="video_drm" value="Not decided"> Not decided</label></div></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="video_captions">Are subtitles / captions required?</label>
+          <select id="video_captions" name="video_captions"><option value="">-- Select --</option><option>No</option><option>Yes — Bangla</option><option>Yes — Bangla and English</option><option>Yes — Bangla, English, Arabic</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="video_quality">Encoding quality levels</label><input id="video_quality" name="video_quality" type="text" placeholder="e.g. 360p, 480p, 720p, 1080p"></div>
+      </div>
+      <div class="field"><label class="lbl" for="video_extra_rules">Any other video rules?</label><textarea id="video_extra_rules" name="video_extra_rules" placeholder="e.g. Videos must have clear audio. Intro music is not allowed."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 13. PDF MEDIA ================= -->
+  <section class="card collapsed" data-section="13. PDF Media (Private S3)">
+    <button type="button" class="card-head"><span class="num">13</span><h2>PDF Media (Private Amazon S3)</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Locked rule: PDFs are stored in a private S3 bucket and delivered through short-lived signed URLs.</p>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="pdf_max_size">Maximum PDF file size</label><input id="pdf_max_size" name="pdf_max_size" type="text" placeholder="e.g. 25 MB"></div>
+        <div class="field"><label class="lbl" for="pdf_per_lesson">Maximum PDFs per lesson</label><input id="pdf_per_lesson" name="pdf_per_lesson" type="text" placeholder="e.g. 3"></div>
+        <div class="field"><label class="lbl" for="pdf_types">Allowed file types</label><input id="pdf_types" name="pdf_types" type="text" placeholder="PDF only, or PDF + DOCX + images"></div>
+        <div class="field"><label class="lbl" for="pdf_url_expiry">Signed URL validity period</label><input id="pdf_url_expiry" name="pdf_url_expiry" type="text" placeholder="e.g. 5 minutes"></div>
+        <div class="field"><label class="lbl" for="pdf_viewer">PDF viewing method</label>
+          <select id="pdf_viewer" name="pdf_viewer"><option value="">-- Select --</option><option>Open in browser tab</option><option>In-app PDF viewer</option><option>Download only</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="pdf_language">PDF language(s)</label><input id="pdf_language" name="pdf_language" type="text" placeholder="Bangla, English, Arabic"></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><div class="lbl">Allow PDF download?</div><div class="opts"><label><input type="radio" name="pdf_download" value="Yes"> Yes</label><label><input type="radio" name="pdf_download" value="No — view only"> No — view only</label></div></div>
+        <div class="field"><div class="lbl">Allow PDF printing?</div><div class="opts"><label><input type="radio" name="pdf_print" value="Yes"> Yes</label><label><input type="radio" name="pdf_print" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Watermark PDFs?</div><div class="opts"><label><input type="radio" name="pdf_watermark" value="Yes"> Yes</label><label><input type="radio" name="pdf_watermark" value="No"> No</label><label><input type="radio" name="pdf_watermark" value="Not decided"> Not decided</label></div></div>
+      </div>
+      <div class="field"><label class="lbl" for="pdf_extra_rules">Any other PDF rules?</label><textarea id="pdf_extra_rules" name="pdf_extra_rules" placeholder="e.g. Every lesson must have a summary PDF. Notes must be in Bangla."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 14. UPLOAD & MEDIA LIFECYCLE ================= -->
+  <section class="card collapsed" data-section="14. Upload &amp; Media Lifecycle">
+    <button type="button" class="card-head"><span class="num">14</span><h2>Upload &amp; Media Lifecycle</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <div class="field"><div class="lbl">Who is allowed to upload media?</div>
+        <div class="opts">
+          <label><input type="checkbox" name="upload_who[]" value="Admin"> Admin</label>
+          <label><input type="checkbox" name="upload_who[]" value="Assigned Teacher"> Assigned Teacher</label>
+          <label><input type="checkbox" name="upload_who[]" value="Content team member"> Content team member</label>
+          <label><input type="checkbox" name="upload_who[]" value="External editor"> External editor</label>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Is upload progress display required?</div><div class="opts"><label><input type="radio" name="upload_progress" value="Yes"> Yes</label><label><input type="radio" name="upload_progress" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Should uploads be resumable?</div><div class="opts"><label><input type="radio" name="upload_resumable" value="Yes"> Yes</label><label><input type="radio" name="upload_resumable" value="No"> No</label><label><input type="radio" name="upload_resumable" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Is bulk upload required?</div><div class="opts"><label><input type="radio" name="upload_bulk" value="Yes"> Yes</label><label><input type="radio" name="upload_bulk" value="No"> No</label><label><input type="radio" name="upload_bulk" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">If an upload fails, what should happen?</div>
+          <select id="upload_fail" name="upload_fail"><option value="">-- Select --</option><option>Keep the draft, let the teacher retry</option><option>Discard everything automatically</option><option>Notify Admin</option><option>Not decided</option></select>
+        </div>
+      </div>
+      <div class="field"><label class="lbl" for="media_replace_policy">Media replacement policy</label><textarea id="media_replace_policy" name="media_replace_policy" placeholder="e.g. Teacher may replace a video only before it is published. After publishing, only Admin can replace."></textarea></div>
+      <div class="field"><label class="lbl" for="media_cleanup">When should old media files be deleted?</label><textarea id="media_cleanup" name="media_cleanup" placeholder="e.g. 30 days after replacement, after confirming the new file works."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 15. LANGUAGE & LOCALIZATION ================= -->
+  <section class="card collapsed" data-section="15. Language &amp; Localization">
+    <button type="button" class="card-head"><span class="num">15</span><h2>Language &amp; Localization</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <div class="grid2">
+        <div class="field" data-req="1"><label class="lbl" for="lang_primary">Primary interface language <span class="req">*</span></label>
+          <select id="lang_primary" name="lang_primary"><option value="">-- Select --</option><option>Bangla</option><option>English</option><option>Arabic</option><option>Bangla + English mixed</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="lang_secondary">Additional languages</label><input id="lang_secondary" name="lang_secondary" type="text" placeholder="e.g. English as secondary"></div>
+        <div class="field"><div class="lbl">Is right-to-left (RTL) support required?</div><div class="opts"><label><input type="radio" name="lang_rtl" value="No"> No</label><label><input type="radio" name="lang_rtl" value="Yes — Arabic pages only"> Yes — Arabic pages only</label><label><input type="radio" name="lang_rtl" value="Yes — whole app"> Yes — whole app</label><label><input type="radio" name="lang_rtl" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><label class="lbl" for="lang_date_format">Date format</label><input id="lang_date_format" name="lang_date_format" type="text" placeholder="e.g. 25 January 2027 (Bangla: ২৫ জানুয়ারি ২০২৭)"></div>
+        <div class="field"><label class="lbl" for="lang_number_format">Number format</label>
+          <select id="lang_number_format" name="lang_number_format"><option value="">-- Select --</option><option>English digits (1234)</option><option>Bangla digits (১২৩৪)</option><option>Both</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="lang_currency_display">Currency display</label><input id="lang_currency_display" name="lang_currency_display" type="text" placeholder="e.g. ৳ 5,000 BDT"></div>
+        <div class="field"><label class="lbl" for="lang_translator">Who will provide translations / final wording?</label><input id="lang_translator" name="lang_translator" type="text" placeholder="e.g. Academy academic team"></div>
+        <div class="field"><label class="lbl" for="lang_content">Should lesson content language vary by subject?</label><input id="lang_content" name="lang_content" type="text" placeholder="e.g. Arabic subject taught in Bangla medium"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 16. UI/UX & DESIGN ================= -->
+  <section class="card collapsed" data-section="16. UI/UX &amp; Design">
+    <button type="button" class="card-head"><span class="num">16</span><h2>UI/UX &amp; Design</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <div class="grid2">
+        <div class="field"><div class="lbl">Do you have wireframes or design mockups?</div><div class="opts"><label><input type="radio" name="ux_wireframes" value="Yes"> Yes</label><label><input type="radio" name="ux_wireframes" value="No"> No</label><label><input type="radio" name="ux_wireframes" value="Partially"> Partially</label></div></div>
+        <div class="field"><label class="lbl" for="ux_wireframe_link">Wireframe / mockup link</label><input id="ux_wireframe_link" name="ux_wireframe_link" type="url" placeholder="Figma / Drive link"></div>
+        <div class="field"><label class="lbl" for="ux_reference_sites">Reference websites you like</label><input id="ux_reference_sites" name="ux_reference_sites" type="text" placeholder="e.g. 10minuteschool.com, coursera.org"></div>
+        <div class="field"><label class="lbl" for="ux_style">Preferred visual style</label>
+          <select id="ux_style" name="ux_style"><option value="">-- Select --</option><option>Clean and minimal</option><option>Colourful and friendly</option><option>Formal and academic</option><option>Modern dark accent</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="ux_component_lib">Component library preference</label>
+          <select id="ux_component_lib" name="ux_component_lib"><option value="">-- Select --</option><option>Tailwind CSS + custom components</option><option>Tailwind + shadcn/ui</option><option>Material UI</option><option>Ant Design</option><option>Chakra UI</option><option>No preference — developer's choice</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="ux_icon_lib">Icon library preference</label><input id="ux_icon_lib" name="ux_icon_lib" type="text" placeholder="e.g. Lucide, Heroicons, Font Awesome"></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><label class="lbl" for="ux_color_primary">Primary colour</label><input id="ux_color_primary" name="ux_color_primary" type="text" placeholder="#0F766E"></div>
+        <div class="field"><label class="lbl" for="ux_color_secondary">Secondary colour</label><input id="ux_color_secondary" name="ux_color_secondary" type="text" placeholder="#0EA5E9"></div>
+        <div class="field"><label class="lbl" for="ux_color_success">Success colour</label><input id="ux_color_success" name="ux_color_success" type="text" placeholder="#16A34A"></div>
+        <div class="field"><label class="lbl" for="ux_color_warning">Warning colour</label><input id="ux_color_warning" name="ux_color_warning" type="text" placeholder="#D97706"></div>
+        <div class="field"><label class="lbl" for="ux_color_error">Error colour</label><input id="ux_color_error" name="ux_color_error" type="text" placeholder="#DC2626"></div>
+        <div class="field"><label class="lbl" for="ux_radius">Corner radius preference</label><input id="ux_radius" name="ux_radius" type="text" placeholder="e.g. 12px rounded cards"></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><div class="lbl">Dark mode required?</div><div class="opts"><label><input type="radio" name="ux_dark" value="No"> No</label><label><input type="radio" name="ux_dark" value="Yes"> Yes</label><label><input type="radio" name="ux_dark" value="Nice to have"> Nice to have</label></div></div>
+        <div class="field"><div class="lbl">Mobile-first layout confirmed?</div><div class="opts"><label><input type="radio" name="ux_mobile_first" value="Yes"> Yes</label><label><input type="radio" name="ux_mobile_first" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Bottom navigation bar on mobile?</div><div class="opts"><label><input type="radio" name="ux_bottom_nav" value="Yes"> Yes</label><label><input type="radio" name="ux_bottom_nav" value="No"> No</label><label><input type="radio" name="ux_bottom_nav" value="Not decided"> Not decided</label></div></div>
+      </div>
+      <div class="field"><label class="lbl" for="ux_status_colors">How should statuses be coloured?</label><textarea id="ux_status_colors" name="ux_status_colors" placeholder="e.g. FREE = grey, PENDING = amber, ACTIVE/OWNED = green, EXPIRED = red, LOCKED = dark grey."></textarea></div>
+      <div class="field"><label class="lbl" for="ux_extra">Any other design requirements?</label><textarea id="ux_extra" name="ux_extra" placeholder="e.g. Must look good on low-end Android phones. Large touch targets."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 17. DASHBOARDS & FEATURES ================= -->
+  <section class="card collapsed" data-section="17. Dashboards &amp; Features">
+    <button type="button" class="card-head"><span class="num">17</span><h2>Dashboards &amp; Feature Scope</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <div class="sub">Student dashboard widgets</div>
+      <div class="field"><div class="opts">
+        <label><input type="checkbox" name="stu_widgets[]" value="Welcome header"> Welcome header</label>
+        <label><input type="checkbox" name="stu_widgets[]" value="Purchase status card"> Purchase status card</label>
+        <label><input type="checkbox" name="stu_widgets[]" value="Subject grid"> Subject grid</label>
+        <label><input type="checkbox" name="stu_widgets[]" value="Free lesson list"> Free lesson list</label>
+        <label><input type="checkbox" name="stu_widgets[]" value="Recent lessons"> Recent lessons</label>
+        <label><input type="checkbox" name="stu_widgets[]" value="Continue watching"> Continue watching</label>
+        <label><input type="checkbox" name="stu_widgets[]" value="Announcements"> Announcements</label>
+        <label><input type="checkbox" name="stu_widgets[]" value="Help / WhatsApp button"> Help / WhatsApp button</label>
+        <label><input type="checkbox" name="stu_widgets[]" value="Enrollment expiry notice"> Enrollment expiry notice</label>
+        <label><input type="checkbox" name="stu_widgets[]" value="Progress tracking"> Progress tracking</label>
+      </div></div>
+      <div class="sub">Teacher dashboard widgets</div>
+      <div class="field"><div class="opts">
+        <label><input type="checkbox" name="tch_widgets[]" value="Assignment count"> Assignment count</label>
+        <label><input type="checkbox" name="tch_widgets[]" value="Published lesson count"> Published lesson count</label>
+        <label><input type="checkbox" name="tch_widgets[]" value="Draft lesson count"> Draft lesson count</label>
+        <label><input type="checkbox" name="tch_widgets[]" value="My assignments list"> My assignments list</label>
+        <label><input type="checkbox" name="tch_widgets[]" value="Recent lessons"> Recent lessons</label>
+        <label><input type="checkbox" name="tch_widgets[]" value="Quick create lesson"> Quick create lesson</label>
+        <label><input type="checkbox" name="tch_widgets[]" value="Media library"> Media library</label>
+      </div></div>
+      <div class="sub">Admin dashboard widgets</div>
+      <div class="field"><div class="opts">
+        <label><input type="checkbox" name="adm_widgets[]" value="KPI cards"> KPI cards</label>
+        <label><input type="checkbox" name="adm_widgets[]" value="Pending purchase requests"> Pending purchase requests</label>
+        <label><input type="checkbox" name="adm_widgets[]" value="Academic overview"> Academic overview</label>
+        <label><input type="checkbox" name="adm_widgets[]" value="Teacher assignments"> Teacher assignments</label>
+        <label><input type="checkbox" name="adm_widgets[]" value="Student overview"> Student overview</label>
+        <label><input type="checkbox" name="adm_widgets[]" value="Recent audit activity"> Recent audit activity</label>
+        <label><input type="checkbox" name="adm_widgets[]" value="Enrollment expiry list"> Enrollment expiry list</label>
+        <label><input type="checkbox" name="adm_widgets[]" value="Revenue summary"> Revenue summary</label>
+      </div></div>
+      <div class="sub">Feature scope</div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Search required?</div><div class="opts"><label><input type="radio" name="feat_search" value="Yes"> Yes</label><label><input type="radio" name="feat_search" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Filters required?</div><div class="opts"><label><input type="radio" name="feat_filters" value="Yes"> Yes</label><label><input type="radio" name="feat_filters" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">CSV / Excel export required?</div><div class="opts"><label><input type="radio" name="feat_export" value="Yes"> Yes</label><label><input type="radio" name="feat_export" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Bulk actions required?</div><div class="opts"><label><input type="radio" name="feat_bulk" value="Yes"> Yes</label><label><input type="radio" name="feat_bulk" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Reports module required?</div><div class="opts"><label><input type="radio" name="feat_reports" value="Yes"> Yes</label><label><input type="radio" name="feat_reports" value="No"> No</label></div></div>
+        <div class="field"><div class="lbl">Announcement feature required?</div><div class="opts"><label><input type="radio" name="feat_announce" value="Yes"> Yes</label><label><input type="radio" name="feat_announce" value="No"> No</label><label><input type="radio" name="feat_announce" value="Future version"> Future version</label></div></div>
+      </div>
+      <div class="field"><label class="lbl" for="feat_reports_types">If reports are needed, which reports?</label><textarea id="feat_reports_types" name="feat_reports_types" placeholder="e.g. Monthly enrollment report, pending purchase report, teacher lesson count report."></textarea></div>
+      <div class="field"><label class="lbl" for="feat_phase2">Which features should be deferred to Phase 2?</label><textarea id="feat_phase2" name="feat_phase2" placeholder="e.g. Certificates, forum, live classes, mobile app, gamification, offline mode."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 18. NOTIFICATIONS ================= -->
+  <section class="card collapsed" data-section="18. Notifications &amp; Communication">
+    <button type="button" class="card-head"><span class="num">18</span><h2>Notifications &amp; Communication</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <div class="field"><div class="lbl">Which notification channels should be used in v1?</div>
+        <div class="opts">
+          <label><input type="checkbox" name="notif_channels[]" value="In-app notifications"> In-app notifications</label>
+          <label><input type="checkbox" name="notif_channels[]" value="Email"> Email</label>
+          <label><input type="checkbox" name="notif_channels[]" value="SMS"> SMS</label>
+          <label><input type="checkbox" name="notif_channels[]" value="WhatsApp"> WhatsApp</label>
+          <label><input type="checkbox" name="notif_channels[]" value="Push notifications"> Push notifications</label>
+        </div>
+      </div>
+      <div class="field"><div class="lbl">Which events should trigger a notification?</div>
+        <div class="opts">
+          <label><input type="checkbox" name="notif_events[]" value="Purchase submitted"> Purchase submitted</label>
+          <label><input type="checkbox" name="notif_events[]" value="Purchase accepted"> Purchase accepted</label>
+          <label><input type="checkbox" name="notif_events[]" value="Purchase rejected"> Purchase rejected</label>
+          <label><input type="checkbox" name="notif_events[]" value="Enrollment expiring soon"> Enrollment expiring soon</label>
+          <label><input type="checkbox" name="notif_events[]" value="Enrollment expired"> Enrollment expired</label>
+          <label><input type="checkbox" name="notif_events[]" value="Session revoked (new device)"> Session revoked (new device)</label>
+          <label><input type="checkbox" name="notif_events[]" value="Account suspended"> Account suspended</label>
+          <label><input type="checkbox" name="notif_events[]" value="New lesson published"> New lesson published</label>
+          <label><input type="checkbox" name="notif_events[]" value="Password changed"> Password changed</label>
+          <label><input type="checkbox" name="notif_events[]" value="Teacher account created"> Teacher account created</label>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="notif_email_provider">Email sending service</label>
+          <select id="notif_email_provider" name="notif_email_provider"><option value="">-- Select --</option><option>Amazon SES</option><option>SendGrid</option><option>Mailgun</option><option>Brevo</option><option>Gmail SMTP</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="notif_sms_provider">SMS provider</label><input id="notif_sms_provider" name="notif_sms_provider" type="text" placeholder="Same as OTP provider?"></div>
+        <div class="field"><label class="lbl" for="notif_wa_provider">WhatsApp API provider (if automated)</label><input id="notif_wa_provider" name="notif_wa_provider" type="text" placeholder="e.g. Meta WhatsApp Cloud API"></div>
+        <div class="field"><label class="lbl" for="notif_sender_name">Notification sender name</label><input id="notif_sender_name" name="notif_sender_name" type="text" placeholder="e.g. Diracha Academy"></div>
+        <div class="field"><label class="lbl" for="notif_quiet_hours">Quiet hours (no notifications)</label><input id="notif_quiet_hours" name="notif_quiet_hours" type="text" placeholder="e.g. 10:00 PM – 7:00 AM"></div>
+        <div class="field"><label class="lbl" for="notif_language">Notification language</label><input id="notif_language" name="notif_language" type="text" placeholder="Bangla / English"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 19. CUSTOMER CARE ================= -->
+  <section class="card collapsed" data-section="19. Customer Care &amp; Operations">
+    <button type="button" class="card-head"><span class="num">19</span><h2>Customer Care &amp; Operations</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Customer Care is an external operational process, not an LMS role.</p>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="care_names">Customer care person(s) name</label><input id="care_names" name="care_names" type="text" placeholder="e.g. Mr. Rakib, Ms. Sumaiya"></div>
+        <div class="field"><label class="lbl" for="care_whatsapp">Customer care WhatsApp number</label><input id="care_whatsapp" name="care_whatsapp" type="tel" placeholder="+880 1XXX XXXXXX"></div>
+        <div class="field"><label class="lbl" for="care_email">Customer care email</label><input id="care_email" name="care_email" type="email" placeholder="care@dirachaacademy.com"></div>
+        <div class="field"><label class="lbl" for="care_hours">Support hours</label><input id="care_hours" name="care_hours" type="text" placeholder="e.g. Saturday–Thursday, 9 AM – 9 PM"></div>
+        <div class="field"><label class="lbl" for="care_sla">Response time target</label><input id="care_sla" name="care_sla" type="text" placeholder="e.g. Within 2 hours"></div>
+        <div class="field"><label class="lbl" for="care_escalation">Escalation path</label><input id="care_escalation" name="care_escalation" type="text" placeholder="e.g. Customer care → Admin → Academy Director"></div>
+      </div>
+      <div class="field"><label class="lbl" for="care_verification">How does customer care verify a payment before informing Admin?</label><textarea id="care_verification" name="care_verification" placeholder="e.g. Check bKash statement, match amount and sender number, ask for screenshot, record transaction ID in a register."></textarea></div>
+      <div class="field"><label class="lbl" for="care_scripts">Customer care scripts / canned replies (if any)</label><textarea id="care_scripts" name="care_scripts" placeholder="Paste any standard replies you want the care team to use."></textarea></div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Should customer care have any LMS access?</div><div class="opts"><label><input type="radio" name="care_lms_access" value="No — external only"> No — external only</label><label><input type="radio" name="care_lms_access" value="Yes — read-only dashboard"> Yes — read-only dashboard</label><label><input type="radio" name="care_lms_access" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Who has authority to approve refunds?</div><input id="care_refund_authority" name="care_refund_authority" type="text" placeholder="e.g. Academy Director only"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 20. PUBLIC PAGES & LEGAL ================= -->
+  <section class="card collapsed" data-section="20. Public Pages &amp; Legal">
+    <button type="button" class="card-head"><span class="num">20</span><h2>Public Pages &amp; Legal</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <div class="field"><label class="lbl" for="pub_about">About page content</label><textarea id="pub_about" name="pub_about" placeholder="Write or describe the About page content."></textarea></div>
+      <div class="field"><label class="lbl" for="pub_contact">Contact page content</label><textarea id="pub_contact" name="pub_contact" placeholder="Address, phone, email, map, working hours."></textarea></div>
+      <div class="field"><label class="lbl" for="pub_faq">FAQ content (if any)</label><textarea id="pub_faq" name="pub_faq" placeholder="Common questions and answers about admission, payment, classes."></textarea></div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="legal_terms_url">Terms of Service URL or file</label><input id="legal_terms_url" name="legal_terms_url" type="text" placeholder="Link or 'need to be written'"></div>
+        <div class="field"><label class="lbl" for="legal_privacy_url">Privacy Policy URL or file</label><input id="legal_privacy_url" name="legal_privacy_url" type="text" placeholder="Link or 'need to be written'"></div>
+        <div class="field"><label class="lbl" for="legal_refund_url">Refund Policy URL or file</label><input id="legal_refund_url" name="legal_refund_url" type="text" placeholder="Link or 'need to be written'"></div>
+        <div class="field"><label class="lbl" for="legal_cookie_url">Cookie Policy URL or file</label><input id="legal_cookie_url" name="legal_cookie_url" type="text" placeholder="Link or 'not required'"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Has a lawyer reviewed your policies?</div><div class="opts"><label><input type="radio" name="legal_reviewed" value="Yes"> Yes</label><label><input type="radio" name="legal_reviewed" value="No"> No</label><label><input type="radio" name="legal_reviewed" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Is parental consent needed for students under 18?</div><div class="opts"><label><input type="radio" name="legal_minor_consent" value="Yes"> Yes</label><label><input type="radio" name="legal_minor_consent" value="No"> No</label><label><input type="radio" name="legal_minor_consent" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Do you need VAT / tax invoices?</div><div class="opts"><label><input type="radio" name="legal_vat" value="Yes"> Yes</label><label><input type="radio" name="legal_vat" value="No"> No</label><label><input type="radio" name="legal_vat" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Do you need printable receipts?</div><div class="opts"><label><input type="radio" name="legal_receipt" value="Yes"> Yes</label><label><input type="radio" name="legal_receipt" value="No"> No</label></div></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="legal_retention">How long should student data be kept?</label><input id="legal_retention" name="legal_retention" type="text" placeholder="e.g. 3 years after last enrollment"></div>
+        <div class="field"><label class="lbl" for="legal_deletion">How should data deletion requests be handled?</label><input id="legal_deletion" name="legal_deletion" type="text" placeholder="e.g. Written request to Admin, account anonymised within 30 days"></div>
+        <div class="field"><label class="lbl" for="legal_copyright">Copyright notice text</label><input id="legal_copyright" name="legal_copyright" type="text" placeholder="© 2027 Diracha Academy. All rights reserved."></div>
+        <div class="field"><label class="lbl" for="legal_seo_keywords">SEO keywords / phrases</label><input id="legal_seo_keywords" name="legal_seo_keywords" type="text" placeholder="e.g. online class 6-12 Bangladesh, Arabic online class"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 21. INFRASTRUCTURE & DEVOPS ================= -->
+  <section class="card collapsed" data-section="21. Infrastructure &amp; DevOps">
+    <button type="button" class="card-head"><span class="num">21</span><h2>Infrastructure &amp; DevOps</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <div class="sub">Cloud &amp; hosting</div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Do you already have an AWS account?</div><div class="opts"><label><input type="radio" name="inf_aws" value="Yes"> Yes</label><label><input type="radio" name="inf_aws" value="No"> No</label><label><input type="radio" name="inf_aws" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><label class="lbl" for="inf_aws_region">Preferred AWS region</label><input id="inf_aws_region" name="inf_aws_region" type="text" placeholder="e.g. ap-south-1 (Mumbai) or ap-southeast-1 (Singapore)"></div>
+        <div class="field"><label class="lbl" for="inf_hosting">Application hosting preference</label>
+          <select id="inf_hosting" name="inf_hosting"><option value="">-- Select --</option><option>AWS EC2</option><option>AWS ECS / Fargate</option><option>AWS Elastic Beanstalk</option><option>AWS App Runner</option><option>Render / Railway</option><option>VPS (DigitalOcean, Contabo)</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="inf_mongo">MongoDB provider</label>
+          <select id="inf_mongo" name="inf_mongo"><option value="">-- Select --</option><option>MongoDB Atlas (M0 free / M10+)</option><option>Self-hosted on EC2</option><option>Other managed MongoDB</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="inf_mongo_tier">MongoDB tier / size</label><input id="inf_mongo_tier" name="inf_mongo_tier" type="text" placeholder="e.g. M10, 2 GB RAM, 10 GB storage"></div>
+        <div class="field"><label class="lbl" for="inf_redis">Redis provider</label>
+          <select id="inf_redis" name="inf_redis"><option value="">-- Select --</option><option>Upstash Redis</option><option>AWS ElastiCache</option><option>Redis Cloud</option><option>Self-hosted</option><option>Not decided</option></select>
+        </div>
+      </div>
+
+      <div class="sub">Storage &amp; media</div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="inf_s3_bucket">S3 bucket name / region</label><input id="inf_s3_bucket" name="inf_s3_bucket" type="text" placeholder="e.g. diracha-private-files / ap-south-1"></div>
+        <div class="field"><label class="lbl" for="inf_s3_versioning">S3 versioning enabled?</div><div class="opts"><label><input type="radio" name="inf_s3_versioning" value="Yes"> Yes</label><label><input type="radio" name="inf_s3_versioning" value="No"> No</label><label><input type="radio" name="inf_s3_versioning" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><label class="lbl" for="inf_bunny">Bunny.net account ready?</label>
+          <select id="inf_bunny" name="inf_bunny"><option value="">-- Select --</option><option>Yes, account created</option><option>No, needs to be created</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="inf_bunny_lib">Bunny library ID / CDN hostname (if known)</label><input id="inf_bunny_lib" name="inf_bunny_lib" type="text" placeholder="e.g. Library 123456 / vz-abc123.b-cdn.net"></div>
+      </div>
+
+      <div class="sub">Domain, environments &amp; CI/CD</div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="inf_registrar">Domain registrar</label><input id="inf_registrar" name="inf_registrar" type="text" placeholder="e.g. Namecheap, Exonhost, Cloudflare"></div>
+        <div class="field"><label class="lbl" for="inf_dns">DNS provider</label><input id="inf_dns" name="inf_dns" type="text" placeholder="e.g. Cloudflare"></div>
+        <div class="field"><label class="lbl" for="inf_prod_domain">Production domain</label><input id="inf_prod_domain" name="inf_prod_domain" type="text" placeholder="dirachaacademy.com"></div>
+        <div class="field"><label class="lbl" for="inf_staging_domain">Staging domain</label><input id="inf_staging_domain" name="inf_staging_domain" type="text" placeholder="staging.dirachaacademy.com"></div>
+        <div class="field"><label class="lbl" for="inf_repo">Code repository</label><input id="inf_repo" name="inf_repo" type="text" placeholder="GitHub / GitLab URL or 'needs to be created'"></div>
+        <div class="field"><label class="lbl" for="inf_ci">CI/CD tool</label>
+          <select id="inf_ci" name="inf_ci"><option value="">-- Select --</option><option>GitHub Actions</option><option>GitLab CI</option><option>CircleCI</option><option>Manual deployment</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="inf_docker">Docker / containerisation required?</label><div class="opts"><label><input type="radio" name="inf_docker" value="Yes"> Yes</label><label><input type="radio" name="inf_docker" value="No"> No</label><label><input type="radio" name="inf_docker" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><label class="lbl" for="inf_staging_required">Is a separate staging environment required?</label><div class="opts"><label><input type="radio" name="inf_staging_required" value="Yes"> Yes</label><label><input type="radio" name="inf_staging_required" value="No"> No</label></div></div>
+      </div>
+
+      <div class="sub">Monitoring, backup &amp; budget</div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="inf_monitoring">Monitoring tool</label><input id="inf_monitoring" name="inf_monitoring" type="text" placeholder="e.g. UptimeRobot, Better Stack, CloudWatch"></div>
+        <div class="field"><label class="lbl" for="inf_logging">Logging tool</label><input id="inf_logging" name="inf_logging" type="text" placeholder="e.g. CloudWatch Logs, Logtail"></div>
+        <div class="field"><label class="lbl" for="inf_error_tracking">Error tracking tool</label><input id="inf_error_tracking" name="inf_error_tracking" type="text" placeholder="e.g. Sentry"></div>
+        <div class="field"><label class="lbl" for="inf_backup_freq">Backup frequency</label><input id="inf_backup_freq" name="inf_backup_freq" type="text" placeholder="e.g. Daily automated backup"></div>
+        <div class="field"><label class="lbl" for="inf_backup_retention">Backup retention</label><input id="inf_backup_retention" name="inf_backup_retention" type="text" placeholder="e.g. 30 days"></div>
+        <div class="field"><div class="lbl">Has a restore test been planned?</div><div class="opts"><label><input type="radio" name="inf_restore_test" value="Yes"> Yes</label><label><input type="radio" name="inf_restore_test" value="No"> No</label><label><input type="radio" name="inf_restore_test" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><label class="lbl" for="inf_budget">Estimated monthly infrastructure budget</label><input id="inf_budget" name="inf_budget" type="text" placeholder="e.g. 100–200 USD per month"></div>
+        <div class="field"><label class="lbl" for="inf_uptime">Uptime target</label><input id="inf_uptime" name="inf_uptime" type="text" placeholder="e.g. 99.5%"></div>
+      </div>
+      <div class="field"><label class="lbl" for="inf_notes">Any infrastructure constraints or preferences?</label><textarea id="inf_notes" name="inf_notes" placeholder="e.g. Must be hosted in Singapore for lower latency. Prefer Bangladeshi hosting for compliance."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 22. CREDENTIALS CHECKLIST ================= -->
+  <section class="card collapsed" data-section="22. Accounts &amp; Credentials Checklist">
+    <button type="button" class="card-head"><span class="num">22</span><h2>Accounts &amp; Credentials Checklist</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Do <b>not</b> paste passwords or secret keys into this form. Only indicate what already exists and how access will be shared securely.</p>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="cred_aws">AWS account</label><select id="cred_aws" name="cred_aws"><option value="">-- Select --</option><option>Ready</option><option>Not created yet</option><option>Being created</option><option>Not applicable</option></select></div>
+        <div class="field"><label class="lbl" for="cred_mongo">MongoDB / Atlas</label><select id="cred_mongo" name="cred_mongo"><option value="">-- Select --</option><option>Ready</option><option>Not created yet</option><option>Being created</option><option>Not applicable</option></select></div>
+        <div class="field"><label class="lbl" for="cred_redis">Redis</label><select id="cred_redis" name="cred_redis"><option value="">-- Select --</option><option>Ready</option><option>Not created yet</option><option>Being created</option><option>Not applicable</option></select></div>
+        <div class="field"><label class="lbl" for="cred_s3">Amazon S3 bucket</label><select id="cred_s3" name="cred_s3"><option value="">-- Select --</option><option>Ready</option><option>Not created yet</option><option>Being created</option><option>Not applicable</option></select></div>
+        <div class="field"><label class="lbl" for="cred_bunny">Bunny.net</label><select id="cred_bunny" name="cred_bunny"><option value="">-- Select --</option><option>Ready</option><option>Not created yet</option><option>Being created</option><option>Not applicable</option></select></div>
+        <div class="field"><label class="lbl" for="cred_sms">SMS / OTP gateway</label><select id="cred_sms" name="cred_sms"><option value="">-- Select --</option><option>Ready</option><option>Not created yet</option><option>Being created</option><option>Not applicable</option></select></div>
+        <div class="field"><label class="lbl" for="cred_email">Email sending service</label><select id="cred_email" name="cred_email"><option value="">-- Select --</option><option>Ready</option><option>Not created yet</option><option>Being created</option><option>Not applicable</option></select></div>
+        <div class="field"><label class="lbl" for="cred_whatsapp">WhatsApp Business / API</label><select id="cred_whatsapp" name="cred_whatsapp"><option value="">-- Select --</option><option>Ready</option><option>Not created yet</option><option>Using normal WhatsApp only</option><option>Not applicable</option></select></div>
+        <div class="field"><label class="lbl" for="cred_domain">Domain &amp; DNS</label><select id="cred_domain" name="cred_domain"><option value="">-- Select --</option><option>Ready</option><option>Not purchased yet</option><option>Being purchased</option></select></div>
+        <div class="field"><label class="lbl" for="cred_repo">Code repository</label><select id="cred_repo" name="cred_repo"><option value="">-- Select --</option><option>Ready</option><option>Not created yet</option><option>Will be created by developer</option></select></div>
+        <div class="field"><label class="lbl" for="cred_design">Design files (Figma etc.)</label><select id="cred_design" name="cred_design"><option value="">-- Select --</option><option>Ready</option><option>Not created yet</option><option>Not applicable</option></select></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="cred_delivery">How will credentials be shared securely?</label>
+          <select id="cred_delivery" name="cred_delivery"><option value="">-- Select --</option><option>1Password</option><option>Bitwarden</option><option>Google Drive (restricted)</option><option>Encrypted email</option><option>In person</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="cred_who">Who will hold the master credentials long-term?</label><input id="cred_who" name="cred_who" type="text" placeholder="e.g. Academy Director + technical lead"></div>
+      </div>
+      <div class="field"><label class="lbl" for="cred_notes">Any credential or access notes?</label><textarea id="cred_notes" name="cred_notes" placeholder="e.g. AWS account is under the director's personal email; we want a separate billing account."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 23. TESTING & QA ================= -->
+  <section class="card collapsed" data-section="23. Testing &amp; QA">
+    <button type="button" class="card-head"><span class="num">23</span><h2>Testing &amp; QA</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="qa_owner">Who will do user acceptance testing (UAT)?</label><input id="qa_owner" name="qa_owner" type="text" placeholder="e.g. Academy director + 2 teachers + 5 students"></div>
+        <div class="field"><label class="lbl" for="qa_bug_tool">Bug tracking method</label><input id="qa_bug_tool" name="qa_bug_tool" type="text" placeholder="e.g. Google Sheet, Trello, GitHub Issues"></div>
+        <div class="field"><label class="lbl" for="qa_load_target">Load test target (concurrent users)</label><input id="qa_load_target" name="qa_load_target" type="text" placeholder="e.g. 500 concurrent users"></div>
+        <div class="field"><label class="lbl" for="qa_acceptance_link">Acceptance criteria document link</label><input id="qa_acceptance_link" name="qa_acceptance_link" type="url" placeholder="https://..."></div>
+      </div>
+      <div class="field"><div class="lbl">Which browsers must be supported?</div>
+        <div class="opts">
+          <label><input type="checkbox" name="qa_browsers[]" value="Chrome (Android)"> Chrome (Android)</label>
+          <label><input type="checkbox" name="qa_browsers[]" value="Chrome (Desktop)"> Chrome (Desktop)</label>
+          <label><input type="checkbox" name="qa_browsers[]" value="Safari (iOS)"> Safari (iOS)</label>
+          <label><input type="checkbox" name="qa_browsers[]" value="Firefox"> Firefox</label>
+          <label><input type="checkbox" name="qa_browsers[]" value="Edge"> Edge</label>
+          <label><input type="checkbox" name="qa_browsers[]" value="Opera Mini"> Opera Mini</label>
+          <label><input type="checkbox" name="qa_browsers[]" value="Samsung Internet"> Samsung Internet</label>
+        </div>
+      </div>
+      <div class="field"><div class="lbl">Which devices must be supported?</div>
+        <div class="opts">
+          <label><input type="checkbox" name="qa_devices[]" value="Low-end Android phone"> Low-end Android phone</label>
+          <label><input type="checkbox" name="qa_devices[]" value="Mid-range Android phone"> Mid-range Android phone</label>
+          <label><input type="checkbox" name="qa_devices[]" value="iPhone"> iPhone</label>
+          <label><input type="checkbox" name="qa_devices[]" value="Tablet"> Tablet</label>
+          <label><input type="checkbox" name="qa_devices[]" value="Laptop / Desktop"> Laptop / Desktop</label>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><div class="lbl">Is a security review required before launch?</div><div class="opts"><label><input type="radio" name="qa_security_review" value="Yes"> Yes</label><label><input type="radio" name="qa_security_review" value="No"> No</label><label><input type="radio" name="qa_security_review" value="Not decided"> Not decided</label></div></div>
+        <div class="field"><div class="lbl">Is a penetration test required?</div><div class="opts"><label><input type="radio" name="qa_pentest" value="Yes"> Yes</label><label><input type="radio" name="qa_pentest" value="No"> No</label><label><input type="radio" name="qa_pentest" value="Not decided"> Not decided</label></div></div>
+      </div>
+      <div class="field"><label class="lbl" for="qa_notes">Any other testing requirements?</label><textarea id="qa_notes" name="qa_notes" placeholder="e.g. Must be tested on slow 3G connections. Must work on Android 8+."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 24. LAUNCH PLAN ================= -->
+  <section class="card collapsed" data-section="24. Launch Plan &amp; Roadmap">
+    <button type="button" class="card-head"><span class="num">24</span><h2>Launch Plan &amp; Roadmap</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="launch_target">Target production launch date</label><input id="launch_target" name="launch_target" type="date" value="2027-01-01"></div>
+        <div class="field"><label class="lbl" for="launch_soft">Soft launch / pilot date</label><input id="launch_soft" name="launch_soft" type="date"></div>
+        <div class="field"><label class="lbl" for="launch_scope">Launch scope</label>
+          <select id="launch_scope" name="launch_scope"><option value="">-- Select --</option><option>All classes at once</option><option>One class first (pilot)</option><option>Free lessons only at first</option><option>Invite-only beta</option><option>Not decided</option></select>
+        </div>
+        <div class="field"><label class="lbl" for="launch_pilot_class">If pilot, which class first?</label><input id="launch_pilot_class" name="launch_pilot_class" type="text" placeholder="e.g. Class 7"></div>
+        <div class="field"><label class="lbl" for="launch_rollback">Rollback plan if launch fails</label><input id="launch_rollback" name="launch_rollback" type="text" placeholder="e.g. Revert to previous deployment within 30 minutes"></div>
+        <div class="field"><label class="lbl" for="launch_support">Who supports users right after launch?</label><input id="launch_support" name="launch_support" type="text" placeholder="e.g. Customer care + developer on standby for 2 weeks"></div>
+        <div class="field"><label class="lbl" for="launch_maintenance">Preferred maintenance window</label><input id="launch_maintenance" name="launch_maintenance" type="text" placeholder="e.g. Friday 2 AM – 4 AM"></div>
+        <div class="field"><label class="lbl" for="launch_training">Will training be needed for Admin / Teachers?</label><input id="launch_training" name="launch_training" type="text" placeholder="e.g. Yes, a 2-hour training session + video guide"></div>
+      </div>
+      <div class="field"><label class="lbl" for="launch_roadmap">Post-launch roadmap / future plans</label><textarea id="launch_roadmap" name="launch_roadmap" placeholder="e.g. Phase 2: mobile app, live classes, certificates, online payment gateway."></textarea></div>
+      <div class="field"><label class="lbl" for="launch_risks">Known risks or concerns</label><textarea id="launch_risks" name="launch_risks" placeholder="e.g. Students may share accounts. Internet speed in rural areas may be low."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 25. OPEN QUESTIONS ================= -->
+  <section class="card collapsed" data-section="25. Open Questions, Assumptions &amp; Notes">
+    <button type="button" class="card-head"><span class="num">25</span><h2>Open Questions, Assumptions &amp; Notes</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <div class="field"><label class="lbl" for="oq_questions">Open questions you want the team to answer</label><textarea id="oq_questions" name="oq_questions" placeholder="Write any question you want answered before development continues."></textarea></div>
+      <div class="field"><label class="lbl" for="oq_assumptions">Assumptions you are making</label><textarea id="oq_assumptions" name="oq_assumptions" placeholder="e.g. We assume most students use Android phones and slow internet."></textarea></div>
+      <div class="field"><label class="lbl" for="oq_constraints">Constraints (time, budget, staff, technology)</label><textarea id="oq_constraints" name="oq_constraints" placeholder="e.g. Budget limit of 200 USD/month. Only one developer available."></textarea></div>
+      <div class="field"><label class="lbl" for="oq_attachments">Links to any attachments (documents, sheets, designs)</label><textarea id="oq_attachments" name="oq_attachments" placeholder="Paste links here — one per line."></textarea></div>
+      <div class="field"><label class="lbl" for="oq_notes">Any other notes for the team</label><textarea id="oq_notes" name="oq_notes" placeholder="Anything else important."></textarea></div>
+    </div>
+  </section>
+
+  <!-- ================= 26. FINAL CONFIRMATION ================= -->
+  <section class="card collapsed" data-section="26. Final Confirmation">
+    <button type="button" class="card-head"><span class="num">26</span><h2>Final Confirmation &amp; Sign-off</h2><span class="badge">0/0</span><span class="chev">▾</span></button>
+    <div class="card-body">
+      <p class="note">Confirm that the answers in this form represent the academy's official decisions.</p>
+      <div class="field" data-req="1"><div class="lbl">I confirm the information in this form is accurate to the best of my knowledge. <span class="req">*</span></div>
+        <div class="opts">
+          <label><input type="radio" name="conf_accurate" value="Yes, confirmed"> Yes, confirmed</label>
+          <label><input type="radio" name="conf_accurate" value="Partly — some items still pending"> Partly — some items still pending</label>
+        </div>
+      </div>
+      <div class="field" data-req="1"><div class="lbl">I have authority to provide these decisions on behalf of the academy. <span class="req">*</span></div>
+        <div class="opts">
+          <label><input type="radio" name="conf_authority" value="Yes"> Yes</label>
+          <label><input type="radio" name="conf_authority" value="No — I am passing this to the decision maker"> No — I am passing this to the decision maker</label>
+        </div>
+      </div>
+      <div class="field"><div class="lbl">I understand that changes after submission will follow a formal change request process.</div>
+        <div class="opts">
+          <label><input type="radio" name="conf_changes" value="Yes, understood"> Yes, understood</label>
+          <label><input type="radio" name="conf_changes" value="No"> No</label>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field" data-req="1"><label class="lbl" for="conf_name">Sign-off name <span class="req">*</span></label><input id="conf_name" name="conf_name" type="text" placeholder="Full name of the person approving these answers"></div>
+        <div class="field" data-req="1"><label class="lbl" for="conf_role">Sign-off role / designation <span class="req">*</span></label><input id="conf_role" name="conf_role" type="text" placeholder="e.g. Academy Director"></div>
+        <div class="field"><label class="lbl" for="conf_date">Sign-off date</label><input id="conf_date" name="conf_date" type="date"></div>
+        <div class="field"><label class="lbl" for="conf_contact">Preferred contact for follow-up</label><input id="conf_contact" name="conf_contact" type="text" placeholder="Phone / email / WhatsApp"></div>
+      </div>
+      <div class="field"><label class="lbl" for="conf_final_note">Final note</label><textarea id="conf_final_note" name="conf_final_note" placeholder="Anything you want to say at the end."></textarea></div>
+    </div>
+  </section>
+
+  </form>
+</div>
+
+<!-- ================= BOTTOM ACTION BAR ================= -->
+<div class="actionbar">
+  <div class="actionbar-in">
+    <span class="grow" id="statusText">Fill in the form. Your answers are saved automatically in this browser.</span>
+    <button type="button" class="btn ghost" id="btnDownload">Download answers</button>
+    <button type="button" class="btn ghost" id="btnCopy">Copy answers</button>
+    <button type="button" class="btn ghost" id="btnClear">Clear saved draft</button>
+    <button type="button" class="btn primary" id="btnSubmit">Submit</button>
+  </div>
+</div>
+
+<!-- ================= MODAL ================= -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h3 id="modalTitle">Sending…</h3>
+    <div id="modalBody"></div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   CONFIGURATION — CHANGE THIS ONE LINE BEFORE UPLOADING
+   Replace the email below with the address that should receive submissions.
+   ========================================================================= */
+const CONFIG = {
+  recipientEmail: "YOUR_EMAIL_HERE@example.com",
+  formTitle: "Diracha Academy LMS — Client Requirements & Decision Form"
+};
+/* ========================================================================= */
+
+const STORAGE_KEY = "diracha_requirements_draft_v1";
+const form = document.getElementById("reqForm");
+const cards = Array.from(document.querySelectorAll(".card[data-section]"));
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalBody = document.getElementById("modalBody");
+const modalActions = document.getElementById("modalActions");
+const statusText = document.getElementById("statusText");
+const saveflag = document.getElementById("saveflag");
+
+/* ---------------- section collapse ---------------- */
+cards.forEach(card => {
+  const head = card.querySelector(".card-head");
+  head.addEventListener("click", () => card.classList.toggle("collapsed"));
+});
+document.getElementById("btnExpand").addEventListener("click", () => {
+  cards.forEach(c => c.classList.remove("collapsed"));
+});
+document.getElementById("btnCollapse").addEventListener("click", () => {
+  cards.forEach(c => c.classList.add("collapsed"));
+});
+document.getElementById("btnPrint").addEventListener("click", () => {
+  cards.forEach(c => c.classList.remove("collapsed"));
+  setTimeout(() => window.print(), 120);
+});
+
+/* ---------------- label helper ---------------- */
+function labelOf(el) {
+  const field = el.closest(".field");
+  if (!field) return el.name || "";
+  const lbl = field.querySelector(".lbl");
+  if (!lbl) return el.name || "";
+  const clone = lbl.cloneNode(true);
+  clone.querySelectorAll(".req, .hint, small").forEach(n => n.remove());
+  return clone.textContent.replace(/\s+/g, " ").trim();
+}
+
+/* ---------------- collect answers ---------------- */
+function collect() {
+  const sections = [];
+  cards.forEach(card => {
+    const title = card.dataset.section;
+    const items = [];
+    const seen = new Set();
+    const controls = Array.from(card.querySelectorAll("input[name], select[name], textarea[name]"));
+    controls.forEach(el => {
+      const name = el.name;
+      if (!name) return;
+      const key = name.replace(/\[\]$/, "");
+      if (seen.has(key)) return;
+      const group = controls.filter(c => c.name === name);
+      let value = "";
+      if (el.type === "radio") {
+        const checked = group.find(g => g.checked);
+        value = checked ? checked.value : "";
+        seen.add(key);
+      } else if (el.type === "checkbox") {
+        value = group.filter(g => g.checked).map(g => g.value).join(", ");
+        seen.add(key);
+      } else {
+        value = (el.value || "").trim();
+        seen.add(key);
+      }
+      items.push({ label: labelOf(el), value: value });
+    });
+    sections.push({ title: title, items: items });
+  });
+  return sections;
+}
+
+/* ---------------- build plain-text report ---------------- */
+function buildReport(sections) {
+  const lines = [];
+  const now = new Date();
+  lines.push("=========================================================");
+  lines.push(CONFIG.formTitle);
+  lines.push("Submitted: " + now.toLocaleString());
+  lines.push("=========================================================");
+  lines.push("");
+  sections.forEach(sec => {
+    const filled = sec.items.filter(i => i.value);
+    if (!filled.length) return;
+    lines.push("---------------------------------------------------------");
+    lines.push(sec.title.toUpperCase());
+    lines.push("---------------------------------------------------------");
+    filled.forEach(i => {
+      lines.push("* " + i.label);
+      lines.push("  " + i.value.replace(/\n/g, "\n  "));
+    });
+    lines.push("");
+  });
+  const unanswered = [];
+  sections.forEach(sec => {
+    sec.items.forEach(i => {
+      if (!i.value) unanswered.push(sec.title + " > " + i.label);
+    });
+  });
+  if (unanswered.length) {
+    lines.push("---------------------------------------------------------");
+    lines.push("NOT ANSWERED (" + unanswered.length + " items)");
+    lines.push("---------------------------------------------------------");
+    unanswered.forEach(u => lines.push("- " + u));
+  }
+  return lines.join("\n");
+}
+
+/* ---------------- build flat payload for email ---------------- */
+function buildPayload(sections) {
+  const payload = {};
+  const submitter = (document.getElementById("sub_name") || {}).value || "Unknown";
+  const email = (document.getElementById("sub_email") || {}).value || "";
+  payload["_subject"] = "Diracha LMS Requirements — " + submitter + " — " + new Date().toLocaleDateString();
+  payload["_template"] = "table";
+  payload["_captcha"] = "false";
+  if (email) payload["_replyto"] = email;
+  sections.forEach(sec => {
+    sec.items.forEach(i => {
+      if (!i.value) return;
+      const key = sec.title + " :: " + i.label;
+      payload[key] = i.value;
+    });
+  });
+  return payload;
+}
+
+/* ---------------- autosave ---------------- */
+let saveTimer = null;
+function saveDraft() {
+  const sections = collect();
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      at: Date.now(),
+      data: sections
+    }));
+    saveflag.classList.add("on");
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => saveflag.classList.remove("on"), 1200);
+  } catch (e) { /* storage may be full or blocked */ }
+  updateProgress();
+}
+
+function restoreDraft() {
+  let raw = null;
+  try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { return; }
+  if (!raw) return;
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch (e) { return; }
+  if (!parsed || !parsed.data) return;
+
+  // Build a lookup: sectionTitle + "||" + label -> value
+  const map = {};
+  parsed.data.forEach(sec => {
+    sec.items.forEach(item => {
+      if (item.value) map[sec.title + "||" + item.label] = item.value;
+    });
+  });
+
+  cards.forEach(card => {
+    const title = card.dataset.section;
+    const seen = new Set();
+    const controls = Array.from(card.querySelectorAll("input[name], select[name], textarea[name]"));
+    controls.forEach(el => {
+      const name = el.name;
+      if (!name) return;
+      const key = name.replace(/\[\]$/, "");
+      if (seen.has(key)) return;
+      seen.add(key);
+      const label = labelOf(el);
+      const val = map[title + "||" + label];
+      if (val === undefined || val === "") return;
+      const group = controls.filter(c => c.name === name);
+      if (el.type === "radio") {
+        group.forEach(g => { if (g.value === val) g.checked = true; });
+      } else if (el.type === "checkbox") {
+        const values = String(val).split(",").map(s => s.trim());
+        group.forEach(g => { if (values.indexOf(g.value) !== -1) g.checked = true; });
+      } else {
+        el.value = val;
+      }
+    });
+  });
+}
+
+/* ---------------- progress ---------------- */
+function isAnswered(field) {
+  const controls = field.querySelectorAll("input, select, textarea");
+  for (const c of controls) {
+    if (c.type === "radio" || c.type === "checkbox") {
+      if (c.checked) return true;
+    } else if ((c.value || "").trim()) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function updateProgress() {
+  const required = Array.from(document.querySelectorAll('.field[data-req="1"]'));
+  const total = required.length;
+  let done = 0;
+  required.forEach(f => { if (isAnswered(f)) done++; });
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  document.getElementById("progressBar").style.width = pct + "%";
+  document.getElementById("progressTxt").textContent = done + " / " + total + " required";
+
+  // per-section badge
+  cards.forEach(card => {
+    const fields = Array.from(card.querySelectorAll('.field[data-req="1"]'));
+    const badge = card.querySelector(".badge");
+    if (!fields.length) {
+      const answered = Array.from(card.querySelectorAll(".field")).filter(isAnswered).length;
+      badge.textContent = answered + " answered";
+      badge.classList.toggle("done", answered > 0);
+      return;
+    }
+    let d = 0;
+    fields.forEach(f => { if (isAnswered(f)) d++; });
+    badge.textContent = d + "/" + fields.length;
+    badge.classList.toggle("done", d === fields.length);
+  });
+}
+
+form.addEventListener("input", saveDraft);
+form.addEventListener("change", saveDraft);
+
+/* ---------------- validation ---------------- */
+function validate() {
+  const missing = [];
+  document.querySelectorAll(".field.error").forEach(f => f.classList.remove("error"));
+  document.querySelectorAll('.field[data-req="1"]').forEach(field => {
+    if (!isAnswered(field)) {
+      field.classList.add("error");
+      missing.push(field);
+    }
+  });
+  return missing;
+}
+
+/* ---------------- modal helpers ---------------- */
+function openModal(title, html, actions) {
+  modalTitle.textContent = title;
+  modalBody.innerHTML = html;
+  modalActions.innerHTML = "";
+  (actions || []).forEach(a => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "btn " + (a.primary ? "primary" : "");
+    b.textContent = a.label;
+    b.addEventListener("click", a.onClick);
+    modalActions.appendChild(b);
+  });
+  modal.classList.add("open");
+}
+function closeModal() { modal.classList.remove("open"); }
+modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+
+/* ---------------- copy / download ---------------- */
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); } catch (e) {}
+  document.body.removeChild(ta);
+  return Promise.resolve();
+}
+
+function downloadJSON() {
+  const sections = collect();
+  const payload = buildPayload(sections);
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const name = (document.getElementById("sub_name").value || "submission").replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+  a.href = url;
+  a.download = "diracha-requirements-" + name + "-" + new Date().toISOString().slice(0, 10) + ".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  statusText.textContent = "Answers downloaded as a JSON file.";
+}
+
+document.getElementById("btnDownload").addEventListener("click", downloadJSON);
+
+document.getElementById("btnCopy").addEventListener("click", () => {
+  const text = buildReport(collect());
+  copyText(text).then(() => {
+    statusText.textContent = "All answers copied to clipboard.";
+  });
+});
+
+document.getElementById("btnClear").addEventListener("click", () => {
+  if (!confirm("Clear the saved draft in this browser? This cannot be undone.")) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  form.reset();
+  document.querySelectorAll(".field.error").forEach(f => f.classList.remove("error"));
+  updateProgress();
+  statusText.textContent = "Saved draft cleared.";
+});
+
+/* ---------------- submit ---------------- */
+const btnSubmit = document.getElementById("btnSubmit");
+
+btnSubmit.addEventListener("click", async () => {
+  const missing = validate();
+
+  if (missing.length) {
+    // open the sections that contain missing fields
+    missing.forEach(f => {
+      const card = f.closest(".card");
+      if (card) card.classList.remove("collapsed");
+    });
+    const first = missing[0];
+    first.scrollIntoView({ behavior: "smooth", block: "center" });
+    const lbl = first.querySelector(".lbl");
+    statusText.textContent = missing.length + " required item(s) still need an answer.";
+    openModal(
+      "Please complete required fields",
+      '<div class="status-err">' + missing.length +
+      ' required item(s) are still empty. They are highlighted in red. The first one has been scrolled into view.</div>',
+      [{ label: "OK", primary: true, onClick: closeModal }]
+    );
+    return;
+  }
+
+  const sections = collect();
+  const report = buildReport(sections);
+  const payload = buildPayload(sections);
+
+  if (!CONFIG.recipientEmail || CONFIG.recipientEmail.indexOf("@") === -1 ||
+      CONFIG.recipientEmail.indexOf("YOUR_EMAIL_HERE") !== -1) {
+    showFallback("The recipient email has not been configured in this file.");
+    return;
+  }
+
+  btnSubmit.disabled = true;
+  btnSubmit.textContent = "Sending…";
+  statusText.textContent = "Sending your answers…";
+  openModal("Sending your answers…", '<div class="status-ok">Please wait. Do not close this tab.</div>', []);
+
+  try {
+    const endpoint = "https://formsubmit.co/ajax/" + encodeURIComponent(CONFIG.recipientEmail);
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    let json = null;
+    try { json = await res.json(); } catch (e) {}
+    if (!res.ok) throw new Error((json && (json.message || json.error)) || ("HTTP " + res.status));
+
+    openModal(
+      "Submitted successfully",
+      '<div class="status-ok"><b>Thank you!</b><br>Your answers have been sent to the project owner.' +
+      '<br><br>You can also keep a copy for your own records using the buttons below.</div>',
+      [
+        { label: "Copy answers", onClick: () => copyText(report).then(() => statusText.textContent = "Copied.") },
+        { label: "Download answers", onClick: downloadJSON },
+        { label: "Close", primary: true, onClick: closeModal }
+      ]
+    );
+    statusText.textContent = "Submitted successfully.";
+  } catch (err) {
+    showFallback(err && err.message ? err.message : "Unknown error");
+  } finally {
+    btnSubmit.disabled = false;
+    btnSubmit.textContent = "Submit";
+  }
+});
+
+function showFallback(reason) {
+  const report = buildReport(collect());
+  const subject = encodeURIComponent(CONFIG.formTitle + " — " + new Date().toLocaleDateString());
+  const body = encodeURIComponent(report.slice(0, 1800) + "\n\n[Message truncated — please use Copy or Download for the full answers.]");
+  const mailto = "mailto:" + encodeURIComponent(CONFIG.recipientEmail) + "?subject=" + subject + "&body=" + body;
+
+  openModal(
+    "Automatic sending failed",
+    '<div class="status-err"><b>Reason:</b> ' + (reason || "unknown") +
+    '<br><br>Your answers are still safe. Use one of the options below to send them manually.</div>' +
+    '<p style="margin-top:14px"><b>Option 1 —</b> Open your email app with the answers pre-filled.</p>' +
+    '<p><b>Option 2 —</b> Copy the full answers and paste them into an email or WhatsApp message.</p>' +
+    '<p><b>Option 3 —</b> Download the answers as a file and attach it to an email.</p>' +
+    '<textarea readonly id="fallbackText"></textarea>',
+    [
+      { label: "Open email app", primary: true, onClick: () => { window.location.href = mailto; } },
+      { label: "Copy all answers", onClick: () => copyText(report).then(() => statusText.textContent = "Copied.") },
+      { label: "Download file", onClick: downloadJSON },
+      { label: "Close", onClick: closeModal }
+    ]
+  );
+  const ta = document.getElementById("fallbackText");
+  if (ta) ta.value = report;
+  statusText.textContent = "Automatic send failed — use the manual options.";
+}
+
+/* ---------------- init ---------------- */
+(function init() {
+  const today = new Date().toISOString().slice(0, 10);
+  const d = document.getElementById("sub_date");
+  if (d) d.value = today;
+  const sd = document.getElementById("conf_date");
+  if (sd) sd.value = today;
+
+  restoreDraft();
+  updateProgress();
+
+  if (!CONFIG.recipientEmail || CONFIG.recipientEmail.indexOf("YOUR_EMAIL_HERE") !== -1) {
+    statusText.textContent = "Note: recipient email not configured yet — submissions will use the manual fallback.";
+  }
+})();
+</script>
+</body>
+</html>
