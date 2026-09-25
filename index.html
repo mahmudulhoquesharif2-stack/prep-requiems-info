@@ -198,6 +198,8 @@ select{appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3
   body{background:#fff}
 }
 </style>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -1314,9 +1316,29 @@ select{appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3
    Replace the email below with the address that should receive submissions.
    ========================================================================= */
 const CONFIG = {
-  recipientEmail: "YOUR_EMAIL_HERE@example.com",
+  // EmailJS values — create these in your EmailJS dashboard.
+  publicKey: "UR6skuZ2OWIcho22i",
+  serviceId: "service_kig7ew5",
+  templateId: "template_d8v8r7f",
+
+  // Used only by the manual mailto fallback.
+  recipientEmail: "mahmudulhoquesharif2@gmail.com",
+
   formTitle: "Diracha Academy LMS — Client Requirements & Decision Form"
 };
+
+// EmailJS is frontend-safe when only the public key is used here.
+// Never put an EmailJS private key/access token in this file.
+if (window.emailjs) {
+  emailjs.init({
+    publicKey: CONFIG.publicKey,
+    blockHeadless: true,
+    limitRate: {
+      id: "diracha-requirements-form",
+      throttle: 10000
+    }
+  });
+}
 /* ========================================================================= */
 
 const STORAGE_KEY = "diracha_requirements_draft_v1";
@@ -1666,15 +1688,29 @@ btnSubmit.addEventListener("click", async () => {
   openModal("Sending your answers…", '<div class="status-ok">Please wait. Do not close this tab.</div>', []);
 
   try {
-    const endpoint = "https://formsubmit.co/ajax/" + encodeURIComponent(CONFIG.recipientEmail);
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify(payload)
+    if (!window.emailjs) {
+      throw new Error("Email service could not be loaded. Please check your internet connection and try again.");
+    }
+    if (!CONFIG.publicKey || CONFIG.publicKey.indexOf("YOUR_EMAILJS_") === 0 ||
+        !CONFIG.serviceId || CONFIG.serviceId.indexOf("YOUR_EMAILJS_") === 0 ||
+        !CONFIG.templateId || CONFIG.templateId.indexOf("YOUR_EMAILJS_") === 0) {
+      throw new Error("EmailJS is not configured yet. Add the Public Key, Service ID, and Template ID in CONFIG.");
+    }
+
+    const submitter = (document.getElementById("sub_name") || {}).value || "Unknown";
+    const email = (document.getElementById("sub_email") || {}).value || "";
+    const submittedAt = new Date().toLocaleString();
+
+    await emailjs.send(CONFIG.serviceId, CONFIG.templateId, {
+      form_title: CONFIG.formTitle,
+      submitter: submitter,
+      submitter_email: email,
+      submitted_at: submittedAt,
+      report: report
     });
-    let json = null;
-    try { json = await res.json(); } catch (e) {}
-    if (!res.ok) throw new Error((json && (json.message || json.error)) || ("HTTP " + res.status));
+
+    // Remove the local draft only after the provider confirms success.
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
 
     openModal(
       "Submitted successfully",
@@ -1732,8 +1768,10 @@ function showFallback(reason) {
   restoreDraft();
   updateProgress();
 
-  if (!CONFIG.recipientEmail || CONFIG.recipientEmail.indexOf("YOUR_EMAIL_HERE") !== -1) {
-    statusText.textContent = "Note: recipient email not configured yet — submissions will use the manual fallback.";
+  if (!CONFIG.publicKey || CONFIG.publicKey.indexOf("YOUR_EMAILJS_") === 0 ||
+      !CONFIG.serviceId || CONFIG.serviceId.indexOf("YOUR_EMAILJS_") === 0 ||
+      !CONFIG.templateId || CONFIG.templateId.indexOf("YOUR_EMAILJS_") === 0) {
+    statusText.textContent = "Note: EmailJS is not configured yet. Complete the EmailJS setup before accepting real submissions.";
   }
 })();
 </script>
